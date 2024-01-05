@@ -1,0 +1,56 @@
+---
+en:
+  decidim:
+    apiext:
+      models:
+        api_user:
+          fields:
+            key: Key
+            created_at: Created at
+            name: Name
+            organization: Organization
+      actions:
+        title: Actions
+        revoke: Revoke token
+        copy_token: Copy token
+        refresh_token: Refresh token
+        new: New API user
+        create: Create
+      api_user:
+        refresh:
+          success: Token refreshed successfully.
+          error: Something went wrong! Please try again later.
+        create:
+          success: API user created successfully.
+          error: API user creation failed.
+        destroy:
+          success: API user successfully deleted.
+      sessions:
+        new:
+          sign_up_disabled: Contact your administrator if you don't have API credentials
+    system:
+      actions:
+        view_api_credentials: View API credentials
+        confirm_destroy: Are you sure you want to revoke this API user?
+      api_users:
+        index:
+          manage: Manage API users
+        new:
+          title: Create new API user
+          select_organization: Select your organization
+      menu:
+        api_credentials: API credentials
+      models:
+        organization:
+          fields:
+            organization_name: Organization name
+        api_user:
+          validations:
+            name_uniqueness: An API user with this name already exists.
+      titles:
+        api_credentials: API credentials
+    accountability:
+      admin:
+        timeline_entries:
+          destroy:
+            invalid: There was a problem deleting this entry.

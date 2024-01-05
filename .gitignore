@@ -1,0 +1,38 @@
+spec/decidim_dummy_app/
+.byebug_history
+pkg/
+.DS_Store
+node_modules/
+.vscode
+development_app/
+.projectile
+npm-debug.log
+karma-*
+coverage
+webpack.report.html
+.bundle
+.cache
+.bash_history
+.local
+.pki
+.graphqlconfig
+schema.json
+.yardoc
+.rspec-failures
+.rbenv-vars
+# Sublime Text 3 indexing file: .tags
+.tags
+# Vim swap files
+*.swp
+# NVM RC (node version manager)
+.nvmrc
+# Decidim webpack packs
+public/decidim-packs
+# tmp folder (used by webpack to deal with cache)
+tmp
+# webpack packs output
+decidim-packs
+# inner package-lock files inside the packages/ folder
+packages/**/package-lock.json
+
+temporary_changelog.md

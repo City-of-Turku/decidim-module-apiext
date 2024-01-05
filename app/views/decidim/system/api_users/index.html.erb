@@ -1,0 +1,12 @@
+<% add_decidim_page_title(t(".manage")) %>
+
+<% provide :title do %>
+  <h2><%= t ".manage" %></h2>
+<% end %>
+
+<div class="actions title">
+  <%= link_to t("new", scope:"decidim.apiext.actions"), new_api_user_path %>
+</div>
+
+<%= render partial: "decidim/system/shared/api_users", locals: { api_users: @api_users } %>
+<%= javascript_pack_tag("decidim_api_ext")%>

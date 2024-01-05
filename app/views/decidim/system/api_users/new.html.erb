@@ -1,0 +1,18 @@
+<% add_decidim_page_title(t(".title")) %>
+
+<% provide :title do %>
+  <h2><%= t ".title" %></h2>
+<% end %>
+<%= form_for(@form, url: api_users_path, method: :post, class: "api-user", html: {id: "new_api_user"}) do |f| %>
+
+  <div class="field">
+    <%= f.select :organization, organizations.map{|organization| [organization.host, organization.id] }, prompt: t(".select_organization") %>
+  </div>
+  <div class="field">
+    <%= f.text_field :name, autofocus: true %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit t("decidim.apiext.actions.create") %>
+  </div>
+<% end %>
