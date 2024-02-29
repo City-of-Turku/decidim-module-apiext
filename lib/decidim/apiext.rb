@@ -12,6 +12,7 @@ module Decidim
     autoload :TokenGenerator, "decidim/apiext/token_generator"
     autoload :MutationExtensions, "decidim/apiext/mutation_extensions"
     autoload :QueryExtensions, "decidim/apiext/query_extensions"
+    autoload :AuthorInterfaceExtensions, "decidim/apiext/author_interface_extensions"
     include ActiveSupport::Configurable
 
     # The default migrations and seeds can fail during the application

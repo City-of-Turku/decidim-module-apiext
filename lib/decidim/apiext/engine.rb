@@ -44,6 +44,8 @@ module Decidim
           # services
           ::Decidim::Traceability.include(TraceabilityExtensions)
           ::Decidim::ActionLogger.include(ActionLoggerExtensions)
+
+          ::Decidim::Core::AuthorInterface.include(AuthorInterfaceExtensions)
         end
       end
 
