@@ -27,8 +27,7 @@ module Decidim
         Decidim.traceability.update!(
           @api_user,
           @current_admin,
-          password: password_token,
-          password_confirmation: password_token
+          api_secret: password_token
         )
       end
 

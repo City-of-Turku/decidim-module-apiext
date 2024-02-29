@@ -3,8 +3,6 @@
 module Decidim
   module Apiext
     class SessionsController < ::Devise::SessionsController
-      include Decidim::DeviseControllers
-
       skip_before_action :verify_authenticity_token
 
       respond_to :json

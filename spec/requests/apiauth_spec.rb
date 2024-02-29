@@ -52,9 +52,9 @@ RSpec.describe "Api authentication", type: :request do
   it "signs out" do
     post sign_in_path, params: params
     expect(response).to have_http_status(:ok)
-    authorzation = response.headers["Authorization"]
+    authorization = response.headers["Authorization"]
     orginal_count = Decidim::Apiext::JwtBlacklist.count
-    delete sign_out_path, params: {}, headers: { HTTP_AUTHORIZATION: authorzation }
+    delete sign_out_path, params: {}, headers: { HTTP_AUTHORIZATION: authorization }
     expect(Decidim::Apiext::JwtBlacklist.count).to eq(orginal_count + 1)
   end
 
@@ -64,11 +64,19 @@ RSpec.describe "Api authentication", type: :request do
     end
 
     it "can use token to post to api" do
-      authorzation = response.headers["Authorization"]
-      post "/api", params: { query: query }, headers: { HTTP_AUTHORIZATION: authorzation }
+      authorization = response.headers["Authorization"]
+      post "/api", params: { query: query }, headers: { HTTP_AUTHORIZATION: authorization }
       parsed_response = JSON.parse(response.body)["data"]
       expect(parsed_response["session"]["user"]["id"].to_i).to eq(api_user.id)
       expect(parsed_response["session"]["user"]["nickname"]).to eq(api_user.nickname.prepend("@"))
+    end
+  end
+
+  context "when not signed in" do
+    it "does not connect to the api" do
+      post "/api", params: { query: query }
+      parsed_response = response.body
+      expect(parsed_response).to match(/You are being.+redirect.+/)
     end
   end
 end

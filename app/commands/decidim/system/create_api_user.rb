@@ -34,8 +34,7 @@ module Decidim
           nickname: ::Decidim::UserBaseEntity.nicknamize(form.name, organization: form.organization),
           admin: true,
           admin_terms_accepted_at: Time.current,
-          password: password_token,
-          password_confirmation: password_token
+          api_secret: password_token
         )
       end
 

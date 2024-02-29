@@ -9,10 +9,6 @@ module Decidim
     module Accountability
       describe ResultMutationType do
         include_context "with a graphql class type"
-        before do
-          allow(::Decidim::Apiext).to receive(:force_api_authentication).and_return(false)
-        end
-
         include_context "with a graphql class type"
 
         let(:model) { create(:result, component: component) }

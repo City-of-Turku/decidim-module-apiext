@@ -9,9 +9,6 @@ module Decidim
     module Budgets
       describe BudgetMutationType do
         include_context "with a graphql class type"
-        before do
-          allow(::Decidim::Apiext).to receive(:force_api_authentication).and_return(false)
-        end
 
         let(:model) { create(:budget, component: component) }
         let(:participatory_space) { create(:participatory_process, organization: current_organization) }

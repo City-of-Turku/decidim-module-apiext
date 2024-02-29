@@ -7,9 +7,6 @@ module Decidim
   module Apiext
     describe ParticipantDetailsType do
       include_context "with a graphql class type"
-      before do
-        allow(::Decidim::Apiext).to receive(:force_api_authentication).and_return(false)
-      end
 
       let(:model) { create(:user, organization: current_organization) }
       let(:current_organization) { create(:organization) }

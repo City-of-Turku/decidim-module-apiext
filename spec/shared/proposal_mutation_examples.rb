@@ -4,7 +4,7 @@ shared_examples "manage proposal mutation examples" do
   context "when non admin user is logged in" do
     describe "try to answer to porposal" do
       it "raises error" do
-        expect { response }.to raise_error(Decidim::Proposals::ActionForbidden)
+        expect { response }.to raise_error(Decidim::Apiext::ActionForbidden)
       end
     end
   end
