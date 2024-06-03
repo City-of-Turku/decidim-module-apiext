@@ -8,7 +8,7 @@ module Decidim
       respond_to :json
 
       def failure
-        render json: ananymus_user.serializable_hash.merge(
+        render json: anonymus_user.serializable_hash.merge(
           jwt_token: nil,
           "avatar" => nil
         ), status: :unauthorized
@@ -47,7 +47,7 @@ module Decidim
         head :ok
       end
 
-      def ananymus_user
+      def anonymus_user
         Decidim::Apiext::ApiUser.new(api_key: params["api_user"]["key"])
       end
     end
