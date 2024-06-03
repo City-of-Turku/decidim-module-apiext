@@ -29,7 +29,7 @@ module Decidim
             line
           end
 
-          raise StandardError.new(self, "Cant find test section in secrets!") unless index
+          raise StandardError.new(self, "Cannot find test section in secrets!") unless index
 
           lines.insert(index + 3, "  secret_key_jwt: #{SecureRandom.hex(64)}\n")
           File.open(secrets_path, "w") do |file|
