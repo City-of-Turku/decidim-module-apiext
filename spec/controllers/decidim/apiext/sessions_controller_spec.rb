@@ -28,9 +28,9 @@ describe Decidim::Apiext::SessionsController, type: :controller do
   end
 
   before do
-    @request.env["devise.mapping"] = ::Devise.mappings[:api_user]
-    @request.env[::Warden::JWTAuth::Middleware::TokenDispatcher::ENV_KEY] = "warden-jwt_auth.token_dispatcher"
-    @request.env["decidim.current_organization"] = organization
+    request.env["devise.mapping"] = ::Devise.mappings[:api_user]
+    request.env[::Warden::JWTAuth::Middleware::TokenDispatcher::ENV_KEY] = "warden-jwt_auth.token_dispatcher"
+    request.env["decidim.current_organization"] = organization
   end
 
   describe "sign in" do
@@ -50,7 +50,7 @@ describe Decidim::Apiext::SessionsController, type: :controller do
     end
 
     it "renders resource witout jwt_token in body when Tokendispatcher::ENV_KEY is nil" do
-      @request.env[::Warden::JWTAuth::Middleware::TokenDispatcher::ENV_KEY] = nil
+      request.env[::Warden::JWTAuth::Middleware::TokenDispatcher::ENV_KEY] = nil
       post :create, params: params
       expect(request.env[::Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY]).to be_present
       parsed_response_body = JSON.parse(response.body)
