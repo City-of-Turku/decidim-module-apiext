@@ -90,8 +90,7 @@ module Decidim
       end
 
       config.after_initialize do
-        # TODO: Why did we add this?
-        # Rails.application.reload_routes!
+        raise "Please define the value for `secret_key_jwt` in config/secrets.yml." if Rails.application.secrets.secret_key_jwt.blank?
 
         # There is some problem setting these configurations to Devise::JWT,
         # so send them directly to the Warden module.
