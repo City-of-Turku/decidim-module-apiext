@@ -28,6 +28,12 @@ module Decidim
         @api_user = Decidim.traceability.create!(
           ::Decidim::Apiext::ApiUser,
           current_admin,
+          **api_user_attributes
+        )
+      end
+
+      def api_user_attributes
+        {
           decidim_organization_id: form.organization,
           api_key: key_token,
           name: form.name,
@@ -35,7 +41,9 @@ module Decidim
           admin: true,
           admin_terms_accepted_at: Time.current,
           api_secret: password_token
-        )
+        }.tap do |attrs|
+          attrs[:published_at] = Time.current if ::Decidim::Apiext::ApiUser.column_names.include?("published_at")
+        end
       end
 
       def key_token
