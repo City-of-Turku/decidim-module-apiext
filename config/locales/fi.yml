@@ -1,0 +1,56 @@
+---
+fi:
+  decidim:
+    apiext:
+      models:
+        api_user:
+          fields:
+            key: Avain
+            created_at: Luontiaika
+            name: Nimi
+            organization: Organisaatio
+      actions:
+        title: Toiminnot
+        revoke: Peruuta tunnus
+        copy_token: Kopioi tunnus
+        refresh_token: Päivitä tunnus
+        new: Uusi rajapintakäyttäjä
+        create: Luo
+      api_user:
+        refresh:
+          success: Tunnuksen päivitys onnistui.
+          error: Jotain meni vikaan! Yritä uudestaan myöhemmin.
+        create:
+          success: Rajapintakäyttäjä luotu onnistuneesti.
+          error: Rajapintakäyttäjän luonti epäonnistui.
+        destroy:
+          success: Rajapintakäyttäjän poisto onnistui.
+      sessions:
+        new:
+          sign_up_disabled: Ota yhteyttä järjestelmänvalvojaan, jos sinulla ei ole rajapintatunnuksia.
+    system:
+      actions:
+        view_api_credentials: Näytä rajapintatunnus
+        confirm_destroy: Haluatko varmasti poistaa tämän rajapintakäyttäjän?
+      api_users:
+        index:
+          manage: Hallitse rajapintakäyttäjiä
+        new:
+          title: Luo rajapintakäyttäjä
+          select_organization: Valitse organisaatio
+      menu:
+        api_credentials: Rajapintatunnukset
+      models:
+        organization:
+          fields:
+            organization_name: Organisaation nimi
+        api_user:
+          validations:
+            name_uniqueness: Rajapintakäyttäjä tällä nimellä on jo olemassa.
+      titles:
+        api_credentials: Rajapintakäyttäjät
+    accountability:
+      admin:
+        timeline_entries:
+          destroy:
+            invalid: Tietueen poisto epäonnistui.

@@ -27,7 +27,7 @@ en:
           success: API user successfully deleted.
       sessions:
         new:
-          sign_up_disabled: Contact your administrator if you don't have API credentials
+          sign_up_disabled: Contact your administrator if you don't have API credentials.
     system:
       actions:
         view_api_credentials: View API credentials

@@ -1,0 +1,56 @@
+---
+sv:
+  decidim:
+    apiext:
+      models:
+        api_user:
+          fields:
+            key: Nyckel
+            created_at: Skapad vid
+            name: Namn
+            organization: Organisation
+      actions:
+        title: Handlingar
+        revoke: Återkalla token
+        copy_token: Kopiera token
+        refresh_token: Uppdatera token
+        new: Ny API-användare
+        create: Skapa
+      api_user:
+        refresh:
+          success: Token har uppdaterats.
+          error: Något gick fel! Vänligen försök igen senare.
+        create:
+          success: API-användare skapades framgångsrikt.
+          error: Det gick inte att skapa API-användare.
+        destroy:
+          success: API-användare har raderats.
+      sessions:
+        new:
+          sign_up_disabled: Kontakta din administratör om du inte har API-uppgifter.
+    system:
+      actions:
+        view_api_credentials: Visa API-uppgifter
+        confirm_destroy: Är du säker på att du vill återkalla denna API-användare?
+      api_users:
+        index:
+          manage: Hantera API-användare
+        new:
+          title: Skapa ny API-användare
+          select_organization: Välj din organisation
+      menu:
+        api_credentials: API-uppgifter
+      models:
+        organization:
+          fields:
+            organization_name: Organisations namn
+        api_user:
+          validations:
+            name_uniqueness: En API-användare med detta namn finns redan.
+      titles:
+        api_credentials: API-uppgifter
+    accountability:
+      admin:
+        timeline_entries:
+          destroy:
+            invalid: Det gick inte att ta bort denna post.
