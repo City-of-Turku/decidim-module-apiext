@@ -6,7 +6,11 @@ module Decidim
       extend ActiveSupport::Concern
 
       included do
-        belongs_to :user, polymorphic: true
+        if Decidim.module_installed? :privacy
+          belongs_to :user, -> { entire_collection }, polymorphic: true
+        else
+          belongs_to :user, polymorphic: true
+        end
       end
     end
   end
