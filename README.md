@@ -30,6 +30,16 @@ The following API capabilities are added:
   * Create timeline entry
   * Update timeline entry
   * Delete timeline entry
+- Files/attachments (through the [API files module](https://github.com/mainio/decidim-module-apifiles))
+  * Upload a file
+  * Delete a file
+  * Attach the file to a record (e.g. a budgets project)
+  * Create attachment
+  * Update attachment
+  * Delete attachment
+  * Create attachment collection
+  * Update attachment collection
+  * Delete attachment collection
 
 In addition, the API user is able to perform any other actions through the API
 that would be normally available for normal users, such as sending new comments.
