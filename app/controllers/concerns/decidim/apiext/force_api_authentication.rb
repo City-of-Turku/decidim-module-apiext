@@ -18,7 +18,7 @@ module Decidim
 
       def ensure_api_authenticated!
         return unless Decidim::Apiext.force_api_authentication
-        return if api_user_signed_in?
+        return if api_user_signed_in? || user_signed_in?
 
         respond_to do |format|
           format.html do
