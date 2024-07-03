@@ -5,6 +5,7 @@ module Decidim
     module Budgets
       class BudgetMutationType < Decidim::Api::Types::BaseObject
         include ::Decidim::Apiext::ApiPermissions
+        include ::Decidim::Apiext::ApiMutationHelpers
 
         graphql_name "BudgetMutation"
         description "A Budget of budget component"
@@ -108,8 +109,8 @@ module Decidim
 
         def project_params(attributes, project = nil)
           {
-            "title" => attributes.title,
-            "description" => attributes.description,
+            "title" => json_value(attributes.title),
+            "description" => json_value(attributes.description),
             "budget_amount" => attributes.budget_amount,
             "budget_amount_min" => attributes.budget_amount_min,
             "address" => attributes&.location&.address,

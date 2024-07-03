@@ -8,6 +8,7 @@ require_relative "apiext/devise"
 
 module Decidim
   module Apiext
+    autoload :ApiMutationHelpers, "decidim/apiext/api_mutation_helpers"
     autoload :ApiPermissions, "decidim/apiext/api_permissions"
     autoload :TokenGenerator, "decidim/apiext/token_generator"
     autoload :MutationExtensions, "decidim/apiext/mutation_extensions"

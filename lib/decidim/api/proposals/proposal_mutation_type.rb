@@ -5,6 +5,7 @@ module Decidim
     module Proposals
       class ProposalMutationType < GraphQL::Schema::Object
         include ::Decidim::Apiext::ApiPermissions
+        include ::Decidim::Apiext::ApiMutationHelpers
 
         graphql_name "ProposalMutation"
         description "a proposal which includes its available mutations"
@@ -27,12 +28,12 @@ module Decidim
 
           params = {
             internal_state: state,
-            answer: answer_content || object.answer,
+            answer: json_value(answer_content) || object.answer,
             component_id: object.component.id.to_s,
             proposal_id: object.id,
             cost: cost || object.cost,
-            cost_report: cost_report || object.cost_report,
-            execution_period: execution_period || object.execution_period
+            cost_report: json_value(cost_report) || object.cost_report,
+            execution_period: json_value(execution_period) || object.execution_period
           }
 
           form = ::Decidim::Proposals::Admin::ProposalAnswerForm.from_params(

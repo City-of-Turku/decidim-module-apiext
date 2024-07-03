@@ -5,6 +5,7 @@ module Decidim
     module Budgets
       class BudgetsMutationType < Decidim::Api::Types::BaseObject
         include ::Decidim::Apiext::ApiPermissions
+        include ::Decidim::Apiext::ApiMutationHelpers
 
         graphql_name "BudgetsMutation"
         description "Budgets of a component."
@@ -96,8 +97,8 @@ A typical mutation would be like:
 
           form = ::Decidim::Budgets::Admin::BudgetForm.from_params(
             weight: attributes.weight,
-            title: attributes.title,
-            description: attributes.description,
+            title: json_value(attributes.title),
+            description: json_value(attributes.description),
             total_budget: attributes.total_budget.to_i,
             decidim_scope_id: attributes.scope_id.to_i
           ).with_context(
@@ -128,8 +129,8 @@ A typical mutation would be like:
 
           form = ::Decidim::Budgets::Admin::BudgetForm.from_params(
             weight: attributes.weight,
-            title: attributes.title,
-            description: attributes.description,
+            title: json_value(attributes.title),
+            description: json_value(attributes.description),
             total_budget: attributes.total_budget.to_i,
             decidim_scope_id: attributes.scope_id
           ).with_context(

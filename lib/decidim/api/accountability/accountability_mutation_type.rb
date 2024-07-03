@@ -5,6 +5,7 @@ module Decidim
     module Accountability
       class AccountabilityMutationType < Decidim::Api::Types::BaseObject
         include ::Decidim::Apiext::ApiPermissions
+        include ::Decidim::Apiext::ApiMutationHelpers
 
         field :create_result, Decidim::Accountability::ResultType, null: false do
           description "create result for the currnt accountability component"
@@ -85,8 +86,8 @@ module Decidim
 
         def accountability_from_params(attributes)
           params = {
-            title: attributes.title,
-            description: attributes.description,
+            title: json_value(attributes.title),
+            description: json_value(attributes.description),
             start_date: attributes.start_date,
             end_date: attributes.end_date,
             progress: attributes.progress,

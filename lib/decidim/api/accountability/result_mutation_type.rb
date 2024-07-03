@@ -5,6 +5,7 @@ module Decidim
     module Accountability
       class ResultMutationType < Decidim::Api::Types::BaseObject
         include Decidim::Apiext::ApiPermissions
+        include ::Decidim::Apiext::ApiMutationHelpers
 
         graphql_name "ResultMutation"
         description "Result of an Accountability component."
@@ -30,8 +31,8 @@ module Decidim
           form = Decidim::Accountability::Admin::TimelineEntryForm.from_params(
             decidim_accountability_result_id: object.id,
             entry_date: attributes.entry_date,
-            description: attributes.description,
-            title: attributes.title
+            description: json_value(attributes.description),
+            title: json_value(attributes.title)
           ).with_context(
             current_organization: current_organization,
             current_component: object.component,
@@ -67,8 +68,8 @@ module Decidim
           form = Decidim::Accountability::Admin::TimelineEntryForm.from_params(
             decidim_accountability_result_id: object.id,
             entry_date: attributes.entry_date,
-            description: attributes.description,
-            title: attributes.title
+            description: json_value(attributes.description),
+            title: json_value(attributes.title)
           ).with_context(
             current_organization: current_organization,
             current_component: object.component,
