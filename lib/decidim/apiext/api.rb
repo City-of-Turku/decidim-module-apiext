@@ -14,6 +14,7 @@ module Decidim
       autoload :BudgetsMutationType, "decidim/api/budgets/budgets_mutation_type"
       autoload :BudgetMutationType, "decidim/api/budgets/budget_mutation_type"
       autoload :BudgetAttributes, "decidim/api/budgets/budget_attributes"
+      autoload :ProjectLinkResourceType, "decidim/api/budgets/project_link_resource_type"
 
       autoload :ProjectAttributes, "decidim/api/budgets/project_attributes"
       autoload :ProjectLocationAttributes, "decidim/api/budgets/project_location_attributes"
