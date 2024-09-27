@@ -23,6 +23,7 @@ module Decidim
     module Accountability
       autoload :AccountabilityMutationType, "decidim/api/accountability/accountability_mutation_type"
       autoload :ResultAttributes, "decidim/api/accountability/result_attributes"
+      autoload :ResultLinkResourceType, "decidim/api/accountability/result_link_resource_type"
 
       autoload :ResultMutationType, "decidim/api/accountability/result_mutation_type"
       autoload :TimelineEntryAttributes, "decidim/api/accountability/timeline_entry_attributes"

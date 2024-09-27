@@ -49,6 +49,9 @@ module Decidim
           ::Decidim::Budgets::ProjectType.include(
             ::Decidim::Apiext::ProjectTypeExtensions
           )
+          ::Decidim::Accountability::ResultType.include(
+            ::Decidim::Apiext::ResultTypeExtensions
+          )
         end
       end
 

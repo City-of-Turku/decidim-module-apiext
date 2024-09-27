@@ -15,6 +15,7 @@ module Decidim
     autoload :QueryExtensions, "decidim/apiext/query_extensions"
     autoload :AuthorInterfaceExtensions, "decidim/apiext/author_interface_extensions"
     autoload :ProjectTypeExtensions, "decidim/apiext/project_type_extensions"
+    autoload :ResultTypeExtensions, "decidim/apiext/result_type_extensions"
 
     include ActiveSupport::Configurable
 
@@ -42,6 +43,15 @@ module Decidim
         resources << Decidim::Proposals::ProposalType if Decidim.const_defined?("Proposals")
         resources << Decidim::Ideas::IdeaType if Decidim.const_defined?("Ideas")
         resources << Decidim::Plans::PlanType if Decidim.const_defined?("Plans")
+      end
+    end
+
+    def self.possible_result_linked_resources
+      @possible_result_linked_resources ||= [].tap do |resources|
+        resources << Decidim::Proposals::ProposalType if Decidim.const_defined?("Proposals")
+        resources << Decidim::Ideas::IdeaType if Decidim.const_defined?("Ideas")
+        resources << Decidim::Plans::PlanType if Decidim.const_defined?("Plans")
+        resources << Decidim::Budgets::ProjectType if Decidim.const_defined?("Budgets")
       end
     end
   end
