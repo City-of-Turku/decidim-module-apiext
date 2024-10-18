@@ -16,7 +16,7 @@ gem "decidim", DECIDIM_VERSION
 gem "decidim-apiext", path: "."
 
 gem "bootsnap", "~> 1.4"
-gem "decidim-apifiles", git: "https://github.com/mainio/decidim-module-apifiles", branch: "main"
+gem "decidim-apifiles", git: "https://github.com/mainio/decidim-module-apifiles", branch: "release/0.27-stable"
 gem "puma", ">= 5.0.0"
 gem "uglifier", "~> 4.1"
 
