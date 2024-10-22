@@ -94,9 +94,8 @@ module Decidim
       end
 
       config.after_initialize do
-        next if Decidim::Apiext.generating_app?
-
-        raise "Please define the value for `secret_key_jwt` in config/secrets.yml." if Rails.application.secrets.secret_key_jwt.blank?
+        # Skip the warden configuration if JWT secret key is not defined (yet).
+        next if Rails.application.secrets.secret_key_jwt.blank?
 
         # There is some problem setting these configurations to Devise::JWT,
         # so send them directly to the Warden module.
