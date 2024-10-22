@@ -8,6 +8,12 @@ def install_module(path)
     system("bundle exec rake decidim_apifiles:install:migrations")
     system("bundle exec rake decidim_apiext:install:migrations")
     system("bundle exec rake db:migrate")
+
+    # Required because of breaking change in `@tarekraafat/autocomplete.js`
+    # version 10.2.8.
+    #
+    # See: https://github.com/decidim/decidim/issues/13569
+    system("npm i '@tarekraafat/autocomplete.js@<=10.2.7'")
   end
 end
 
