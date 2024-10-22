@@ -6,30 +6,28 @@ module Decidim
   module Apiext
     module Generators
       class InstallGenerator < Rails::Generators::Base
-        class_option(
-          :test_initializer,
-          desc: "Defines whether to add jwt secret to to application",
-          type: :boolean,
-          default: false
-        )
-
+        desc "This generator adds the JWT secrets to config/secrets.yml"
         def add_jwt_secret
           secrets_path = Rails.application.root.join("config", "secrets.yml")
           evaluated_secrets = ERB.new(File.read(secrets_path))
           secrets = YAML.safe_load(evaluated_secrets.result, [], [], true)
 
-          return if secrets.dig(:test, :secret_key_jwt)
-          return unless options[:test_initializer]
+          add_secret_to(secrets_path, /^development:/) unless secrets.dig(:development, :secret_key_jwt)
+          add_secret_to(secrets_path, /^test:/) unless secrets.dig(:test, :secret_key_jwt)
+        end
 
+        private
+
+        def add_secret_to(secrets_path, matcher)
           index = nil
           i = 0
           lines = File.readlines(secrets_path).map do |line|
-            index = i if line.match?(/^test:/)
+            index = i if line.match?(matcher)
             i += 1
             line
           end
 
-          raise StandardError.new(self, "Cant find test section in secrets!") unless index
+          raise StandardError.new(self, "Cannot find section '#{matcher}' in secrets!") unless index
 
           lines.insert(index + 3, "  secret_key_jwt: #{SecureRandom.hex(64)}\n")
           File.open(secrets_path, "w") do |file|

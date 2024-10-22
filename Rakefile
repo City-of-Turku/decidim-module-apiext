@@ -4,8 +4,16 @@ require "decidim/dev/common_rake"
 
 def install_module(path)
   Dir.chdir(path) do
+    system("bundle exec rails generate decidim:apiext:install")
+    system("bundle exec rake decidim_apifiles:install:migrations")
     system("bundle exec rake decidim_apiext:install:migrations")
     system("bundle exec rake db:migrate")
+  end
+end
+
+def seed_db(path)
+  Dir.chdir(path) do
+    system("bundle exec rake db:seed")
   end
 end
 
@@ -26,10 +34,10 @@ task :development_app do
       "--path",
       "..",
       "--recreate_db",
-      "--seed_db",
       "--demo"
     )
   end
 
   install_module("development_app")
+  seed_db("development_app")
 end

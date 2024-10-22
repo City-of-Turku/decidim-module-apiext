@@ -28,8 +28,6 @@ module Decidim
       end
 
       initializer "decidim_apiext.add_customizations", before: "decidim_comments.query_extensions" do
-        next unless Decidim::Apiext.apply_extensions?
-
         config.to_prepare do
           # controllers
           ::Decidim::Api::QueriesController.include(ApiQueriesControllerExtensions)
@@ -96,6 +94,8 @@ module Decidim
       end
 
       config.after_initialize do
+        next if Decidim::Apiext.generating_app?
+
         raise "Please define the value for `secret_key_jwt` in config/secrets.yml." if Rails.application.secrets.secret_key_jwt.blank?
 
         # There is some problem setting these configurations to Devise::JWT,

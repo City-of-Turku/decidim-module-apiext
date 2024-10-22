@@ -19,17 +19,16 @@ module Decidim
 
     include ActiveSupport::Configurable
 
-    # The default migrations and seeds can fail during the application
-    # generation because of the extensions added to the ActionLog model.
-    # This is why we need to detect if the application
-    # is loaded by one of these rake tasks and skip adding the ActionLog related
-    # extensions during these tasks to make them work as they normally would.
-    def self.apply_extensions?
-      return true unless defined?(Rake)
-      return true unless Rake.respond_to?(:application)
-      return false if ["db:migrate", "db:seed"].any? { |task| Rake.application.top_level_tasks.include?(task) }
+    # During the app generation, some initializers need to be skipped.
+    def self.generating_app?
+      return false unless defined?(Rake)
+      return true if $PROGRAM_NAME.match?(%r{(\A|/)rails\z}) && $ARGV[0] == "decidim:apiext:install"
+      return false unless Rake.respond_to?(:application)
+      return true if Rake.application.top_level_tasks.include?("app:template")
 
-      true
+      ["decidim:", "decidim_api:", "decidim_apifiles:", "decidim_apiext:", "db:"].any? do |prefix|
+        Rake.application.top_level_tasks.any? { |task| task.start_with?(prefix) }
+      end
     end
 
     # Public Setting that makes the API authentication necessary in order to
