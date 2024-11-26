@@ -13,6 +13,10 @@ module Decidim
         type.field :linking_resources, [Decidim::Apiext::Budgets::ProjectLinkResourceType], null: true do
           description "The linking resources for this project."
         end
+
+        type.field :decidim_budgets_budget_id, GraphQL::Types::ID, "The internal ID for this project", null: false do
+          description "The budget id which this project attached to"
+        end
       end
 
       def linked_resources
