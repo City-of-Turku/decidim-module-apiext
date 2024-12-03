@@ -28,6 +28,9 @@ en:
       sessions:
         new:
           sign_up_disabled: Contact your administrator if you don't have API credentials.
+      budgets:
+        project_mutation:
+          invalid: "Could not find project"
     system:
       actions:
         view_api_credentials: View API credentials

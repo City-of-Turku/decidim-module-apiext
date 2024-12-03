@@ -25,7 +25,7 @@ module Decidim
           argument :attributes, ProjectAttributes, required: true
         end
 
-        field :project, ::Decidim::Apiext::Budgets::ProjectMutationType, description: "Mutates a project", null: true do
+        field :project, ProjectMutationType, description: "Mutates a project", null: true do
           argument :id, GraphQL::Types::ID, required: true
         end
 
@@ -98,6 +98,14 @@ module Decidim
           )
         end
 
+        def project(id:)
+          object.projects.find(id)
+        rescue ActiveRecord::RecordNotFound
+          GraphQL::ExecutionError.new(
+            I18n.t("decidim.apiext.budgets.project_mutation.invalid")
+          )
+        end
+
         private
 
         def project_form_from(attributes, project = nil)
@@ -106,7 +114,8 @@ module Decidim
           ).with_context(
             current_organization: current_organization,
             current_component: object.component,
-            current_user: current_user
+            current_user: current_user,
+            budget: budget_from_id(attributes.budget_id)
           )
         end
 
@@ -126,7 +135,6 @@ module Decidim
             "plan_ids" => attributes.plan_ids || related_ids_for(project, :plans)
           }.tap do |attrs|
             attrs.merge!(attributes.main_image_attributes) if attributes.main_image_attributes
-            attrs.merge!(budget: budget_from_id(attributes.budget_id)) if attributes.budget_id
           end
         end
 

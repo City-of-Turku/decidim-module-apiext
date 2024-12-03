@@ -17,6 +17,14 @@ module Decidim
         type.field :decidim_budgets_budget_id, GraphQL::Types::ID, "The internal ID for this project", null: false do
           description "The budget id which this project attached to"
         end
+
+        type.field :attachments, [::Decidim::Core::AttachmentType], null: false do
+          description "The attachments of a project"
+        end
+
+        type.field :attachment_collection, [::Decidim::Apifiles::AttachmentCollectionType], null: false do
+          description "The attachments of a project"
+        end
       end
 
       def linked_resources

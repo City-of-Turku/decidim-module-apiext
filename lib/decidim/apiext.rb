@@ -16,6 +16,7 @@ module Decidim
     autoload :AuthorInterfaceExtensions, "decidim/apiext/author_interface_extensions"
     autoload :ProjectTypeExtensions, "decidim/apiext/project_type_extensions"
     autoload :ResultTypeExtensions, "decidim/apiext/result_type_extensions"
+    autoload :BudgetTypeExtensions, "decidim/apiext/budget_type_extensions"
 
     include ActiveSupport::Configurable
 

@@ -47,6 +47,9 @@ module Decidim
           ::Decidim::ActionLogger.include(ActionLoggerExtensions)
 
           ::Decidim::Core::AuthorInterface.include(AuthorInterfaceExtensions)
+          ::Decidim::Budgets::BudgetType.include(
+            ::Decidim::Apiext::BudgetTypeExtensions
+          )
           ::Decidim::Budgets::ProjectType.include(
             ::Decidim::Apiext::ProjectTypeExtensions
           )

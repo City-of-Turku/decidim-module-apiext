@@ -8,10 +8,9 @@ module Decidim
       included do
         private
 
-        attr_reader :budget
-
         def update_project
           attributes = {
+            budget: form.budget,
             scope: form.scope,
             category: form.category,
             title: form.title,
@@ -22,7 +21,6 @@ module Decidim
             latitude: form.latitude,
             longitude: form.longitude
           }
-          attributes[:budget] = budget if form.budget
 
           Decidim.traceability.update!(
             project,
