@@ -29,6 +29,9 @@ module Decidim
 
       initializer "decidim_apiext.add_customizations", before: "decidim_comments.query_extensions" do
         config.to_prepare do
+          # commands
+          ::Decidim::Budgets::Admin::UpdateProject.include(UpdateProjectExtensions)
+
           # controllers
           ::Decidim::Api::QueriesController.include(ApiQueriesControllerExtensions)
 

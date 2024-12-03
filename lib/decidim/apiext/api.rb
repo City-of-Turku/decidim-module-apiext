@@ -18,6 +18,7 @@ module Decidim
 
       autoload :ProjectAttributes, "decidim/api/budgets/project_attributes"
       autoload :ProjectLocationAttributes, "decidim/api/budgets/project_location_attributes"
+      autoload :ProjectMutationType, "decidim/api/budgets/project_mutation_type"
     end
 
     module Accountability

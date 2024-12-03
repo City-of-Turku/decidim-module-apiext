@@ -8,6 +8,7 @@ module Decidim
 
         argument :title, GraphQL::Types::JSON, description: "The project title localized hash, e.g. {\"en\": \"English title\"}", required: true
         argument :description, GraphQL::Types::JSON, description: "The project description localized hash (HTML), e.g. {\"en\": \"<p>English description</p>\"}", required: true
+        argument :budget_id, GraphQL::Types::ID, description: "The project budget ID", required: true
         argument :budget_amount, GraphQL::Types::Int, description: "The budget amount of the project (maximum)", required: true
         argument :budget_amount_min, GraphQL::Types::Int, description: "The minimum budget amount of the project", required: false
 
