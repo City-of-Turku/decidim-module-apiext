@@ -16,6 +16,7 @@ module Decidim
         argument :weight, GraphQL::Types::Float, description: "The weight (order) of the result", required: false
         argument :external_id, GraphQL::Types::String, description: "The external id of the result", required: false
 
+        argument :category_id, GraphQL::Types::ID, description: "The result category ID", required: false
         argument :scope_id, GraphQL::Types::ID, description: "The result scope ID", required: false
         argument :parent_id, GraphQL::Types::ID, description: "The parent id of the result", required: false
         argument :proposal_ids, [GraphQL::Types::Int], description: "The linked proposal IDs for the result", required: false
