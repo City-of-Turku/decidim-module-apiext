@@ -99,8 +99,6 @@ module Decidim
             decidim_category_id: attributes.category_id,
             project_ids: attributes.project_ids || current_linked_resources(@result, :projects),
             proposal_ids: attributes.proposal_ids || current_linked_resources(@result, :proposals)
-            # project_ids: attributes.project_ids,
-            # proposal_ids: attributes.proposal_ids
           }
           ::Decidim::Accountability::Admin::ResultForm.from_params(
             params
