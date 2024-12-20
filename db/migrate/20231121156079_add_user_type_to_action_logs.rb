@@ -19,7 +19,7 @@ class AddUserTypeToActionLogs < ActiveRecord::Migration[6.1]
       user = User.find_by(id: log.decidim_user_id) if log.decidim_user_id.present?
       log.update!(
         user_type: user.is_a?(User) ? user.type : "Decidim::Apiext::ApiUser",
-        decidim_user_id: user.id
+        decidim_user_id: log.decidim_user_id
       )
     end
     rename_column :decidim_action_logs, :decidim_user_id, :user_id
