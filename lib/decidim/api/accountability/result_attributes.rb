@@ -7,7 +7,7 @@ module Decidim
         graphql_name "ResultAttributes"
         description "Attributes for an accountability result"
 
-        argument :title, GraphQL::Types::JSON, description: "The result title localized hash, e.g. {\"en\": \"English title\"}", required: true
+        argument :title, GraphQL::Types::JSON, description: "The result title localized hash, e.g. {\"en\": \"English title\"}", required: false
         argument :description, GraphQL::Types::JSON, description: "The result description localized hash (HTML), e.g. {\"en\": \"<p>English description</p>\"}", required: false
         argument :start_date, GraphQL::Types::ISO8601DateTime, description: "The result start date", required: false
         argument :end_date, GraphQL::Types::ISO8601DateTime, description: "The result end date", required: false

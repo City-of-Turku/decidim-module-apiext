@@ -86,8 +86,8 @@ module Decidim
 
         def accountability_from_params(attributes)
           params = {
-            title: json_value(attributes.title),
-            description: json_value(attributes.description),
+            title: attributes.title || @result.title,
+            description: attributes.description,
             start_date: attributes.start_date,
             end_date: attributes.end_date,
             progress: attributes.progress,
@@ -97,8 +97,10 @@ module Decidim
             parent_id: attributes.parent_id,
             decidim_scope_id: attributes.scope_id,
             decidim_category_id: attributes.category_id,
-            project_ids: attributes.project_ids,
-            proposal_ids: attributes.proposal_ids
+            project_ids: attributes.project_ids || current_linked_resources(@result, :projects),
+            proposal_ids: attributes.proposal_ids || current_linked_resources(@result, :proposals)
+            # project_ids: attributes.project_ids,
+            # proposal_ids: attributes.proposal_ids
           }
           ::Decidim::Accountability::Admin::ResultForm.from_params(
             params
@@ -123,6 +125,15 @@ module Decidim
 
         def scope(id)
           object.scopes.order(:id).find(id)
+        end
+
+        def current_linked_resources(result, type)
+          case type
+          when :proposals
+            result.linked_resources(:proposals, "included_proposals").pluck(:id)
+          when :projects
+            result.linked_resources(:projects, "included_projects").pluck(:id)
+          end
         end
       end
     end
