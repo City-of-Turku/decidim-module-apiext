@@ -115,7 +115,7 @@ module Decidim
             current_organization: current_organization,
             current_component: object.component,
             current_user: current_user,
-            budget: budget_from_id(attributes.budget_id)
+            budget: object
           )
         end
 
@@ -150,10 +150,6 @@ module Decidim
 
         def current_user
           context[:current_user]
-        end
-
-        def budget_from_id(budget_id)
-          ::Decidim::Budgets::Budget.find(budget_id)
         end
       end
     end
