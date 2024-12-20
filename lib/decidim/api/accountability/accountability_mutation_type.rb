@@ -93,7 +93,6 @@ module Decidim
             progress: attributes.progress,
             decidim_accountability_status_id: attributes.status_id,
             weight: attributes.weight,
-            external_id: attributes.external_id,
             parent_id: attributes.parent_id,
             decidim_scope_id: attributes.scope_id,
             decidim_category_id: attributes.category_id,
