@@ -78,7 +78,7 @@ module Decidim
           end
         end
 
-        def result(id)
+        def result(id:)
           @result ||= Decidim::Accountability::Result.find_by(id: id, component: object)
         end
 
