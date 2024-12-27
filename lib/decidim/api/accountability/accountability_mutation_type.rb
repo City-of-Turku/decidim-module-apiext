@@ -33,6 +33,7 @@ module Decidim
             on(:ok) do
               # The command does not broadcast the result so we need to fetch it
               # from a private method within the command itself.
+              result.touch
               return result
             end
 
@@ -49,7 +50,7 @@ module Decidim
         end
 
         def update_result(attributes:, id:)
-          enforce_permission_to :update, :result, result: result(id)
+          enforce_permission_to :update, :result, result: result(id: id)
 
           form = accountability_from_params(attributes)
           Decidim::Accountability::Admin::UpdateResult.call(form, @result) do
@@ -69,7 +70,7 @@ module Decidim
         end
 
         def delete_result(id:)
-          enforce_permission_to :destroy, :result, result: result(id)
+          enforce_permission_to :destroy, :result, result: result(id: id)
 
           Decidim::Accountability::Admin::DestroyResult.call(@result, current_user) do
             on(:ok, result) do
