@@ -31,9 +31,6 @@ module Decidim
           form = accountability_from_params(attributes)
           Decidim::Accountability::Admin::CreateResult.call(form) do
             on(:ok) do
-              # The command does not broadcast the result so we need to fetch it
-              # from a private method within the command itself.
-              result.touch
               return result
             end
 
