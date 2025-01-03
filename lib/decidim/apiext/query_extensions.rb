@@ -23,16 +23,9 @@ module Decidim
       end
 
       def component(id: {})
-        return public_component(id) unless allowed_to? :read, :component, user: context[:current_user]
+        return nil unless allowed_to? :read, :component, user: context[:current_user]
 
         component = Decidim::Component.find_by(id: id)
-        component&.organization == context[:current_organization] ? component : nil
-      end
-
-      private
-
-      def public_component(id)
-        component = Decidim::Component.published.find_by(id: id)
         component&.organization == context[:current_organization] ? component : nil
       end
     end
