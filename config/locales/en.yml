@@ -6,14 +6,28 @@ en:
         api_user:
           fields:
             key: Key
+            secret: Secret
             created_at: Created at
             name: Name
             organization: Organization
       actions:
+        api_user:
+          hidden_secret: Secret is hidden
+          hide_secret: Hide Secret
+          secret_can_not_be_shown: the API secret can be only seen or copied after creation
+          show_secret: Show secret
+          shown_secret: Secret is shown
+        api_users:
+          remove: Remove user
+        confirm_refresh_api_secret: Are you sure you want to refresh the secret for this API user? After the refresh, the old secret will be invalid and can no longer be used.
+        confirm_remove_api_user: Are you sure you want to remove this API user?
+        copied: Copied
+        copy_secret: Copy secret
+        copy_secret_clarification: Copy secret to the clipboard
         title: Actions
         revoke: Revoke token
         copy_token: Copy token
-        refresh_token: Refresh token
+        refresh_secret: Refresh secret
         new: New API user
         create: Create
       api_user:

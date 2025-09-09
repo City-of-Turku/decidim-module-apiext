@@ -6,14 +6,28 @@ sv:
         api_user:
           fields:
             key: Nyckel
+            secret: Hemlighet
             created_at: Skapad vid
             name: Namn
             organization: Organisation
       actions:
+        api_user:
+          hidden_secret: Hemlighet är dold
+          hide_secret: Dölj hemlighet
+          secret_can_not_be_shown: API:s hemlighet kan bara ses vid skapande eller kopiering
+          show_secret: Visa hemlighet
+          shown_secret: Hemligheten visas
+        api_users:
+          remove: Ta bort användaren
+        confirm_refresh_api_secret: Är du säker på att du vill uppdatera hemlighet för denna API-användare? Efter uppdateringen kommer den gamla hemligheten att vara ogiltig och kan inte längre användas.
+        confirm_remove_api_user: Är du säker på att du vill ta bort denna API-användare?
+        copied: Kopierad
+        copy_secret: Kopiera hemlighet
+        copy_secret_clarification: Kopiera hemlighet till urklipp
         title: Handlingar
         revoke: Återkalla token
         copy_token: Kopiera token
-        refresh_token: Uppdatera token
+        refresh_secret: Uppdatera hemlighet
         new: Ny API-användare
         create: Skapa
       api_user:

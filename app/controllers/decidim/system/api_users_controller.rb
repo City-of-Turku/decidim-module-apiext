@@ -8,6 +8,7 @@ module Decidim
 
       def index
         @api_users = api_users
+        @secret_user = session.delete(:api_user)&.with_indifferent_access
       end
 
       def new
@@ -26,9 +27,10 @@ module Decidim
 
       def update
         RefreshApiUserToken.call(api_user, current_admin) do
-          on(:ok) do |token|
+          on(:ok) do |secret|
             flash[:notice] = I18n.t("api_user.refresh.success", scope: "decidim.apiext", user: api_user.api_key)
-            redirect_to action: :index, token: token, api_user: api_user
+            session[:api_user] = { id: api_user.id, secret: secret }
+            redirect_to action: :index
           end
 
           on(:invalid) do
@@ -41,9 +43,10 @@ module Decidim
       def create
         @form = ::Decidim::System::ApiUserForm.from_params(params.merge!(name: params[:admin][:name], organization: organization))
         CreateApiUser.call(@form, current_admin) do
-          on(:ok) do |api_user, token|
+          on(:ok) do |api_user, secret|
             flash[:notice] = I18n.t("api_user.create.success", scope: "decidim.apiext", user: api_user.api_key)
-            redirect_to action: :index, token: token, api_user: api_user
+            session[:api_user] = { id: api_user.id, secret: secret }
+            redirect_to action: :index
           end
 
           on(:invalid) do

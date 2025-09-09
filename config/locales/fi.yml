@@ -6,14 +6,28 @@ fi:
         api_user:
           fields:
             key: Avain
+            secret: Salasana
             created_at: Luontiaika
             name: Nimi
             organization: Organisaatio
       actions:
+        api_user:
+          hidden_secret: Rajapintasalasana on piilotettu
+          hide_secret: Piilota rajapintasalasana
+          secret_can_not_be_shown: rajapintasalasana näytetään ja sen voi kopioida ainoastaan sen luonnin jälkeen
+          show_secret: Näytä rajapintasalasana
+          shown_secret: Rajapintasalasana näytetään
+        api_users:
+          remove: Poista käyttäjä
+        confirm_refresh_api_secret: Haluatko varmasti päivittää rajapintasalasanan tälle rajapintakäyttäjälle? Päivittämisen jälkeen vanha salasana mitätöidään, eikä sitä voi enää käyttää.
+        confirm_remove_api_user: Haluatko varmasti poistaa tämän rajapintakäyttäjän?
+        copied: Kopioitu
+        copy_secret: Kopioi salasana
+        copy_secret_clarification: Kopioi salasana leikepöydälle
         title: Toiminnot
         revoke: Peruuta tunnus
         copy_token: Kopioi tunnus
-        refresh_token: Päivitä tunnus
+        refresh_secret: Päivitä salasana
         new: Uusi rajapintakäyttäjä
         create: Luo
       api_user:

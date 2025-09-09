@@ -1,0 +1,11 @@
+.input-group__password {
+  @apply w-full relative;
+
+  input {
+    @apply w-full;
+  }
+
+  button {
+    @apply absolute ltr:right-2 rtl:left-2 top-4;
+  }
+}

@@ -1,12 +1,20 @@
 <% add_decidim_page_title(t(".manage")) %>
 
 <% provide :title do %>
-  <h2><%= t ".manage" %></h2>
+  <h1 class="h1"><%= t ".manage" %></h1>
 <% end %>
 
-<div class="actions title">
-  <%= link_to t("new", scope:"decidim.apiext.actions"), new_api_user_path %>
-</div>
+<%= link_to t("new", scope:"decidim.apiext.actions"), [:new, :api_user], class: "button button__sm md:button__lg button__primary" %>
 
 <%= render partial: "decidim/system/shared/api_users", locals: { api_users: @api_users } %>
-<%= javascript_pack_tag("decidim_api_ext")%>
+
+<%= append_javascript_pack_tag "decidim_apiext" %>
+<%= append_stylesheet_pack_tag "decidim_apiext" %>
+
+<%
+remixicon_path = Decidim.cors_enabled ? "" : asset_pack_path("media/images/remixicon.symbol.svg")
+%>
+
+<script>
+  Decidim.config.set("remixicon_path", <%== remixicon_path.to_json %>);
+</script>
