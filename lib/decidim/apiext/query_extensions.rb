@@ -11,11 +11,6 @@ module Decidim
           argument :id, GraphQL::Types::ID, "The ID of the participant", required: true
           argument :nickname, GraphQL::Types::String, "The @nickname of the participant", required: false
         end
-
-        type.field :component, Decidim::Core::ComponentInterface, null: true do
-          description "Lists the components this space contains."
-          argument :id, GraphQL::Types::ID, required: true, description: "The ID of the component to be found"
-        end
       end
 
       def participant_details(id: nil, nickname: nil)
