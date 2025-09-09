@@ -8,7 +8,7 @@ module Decidim
     describe CreateComment do
       describe "call" do
         include_context "when creating a comment" do
-          let(:author) { create(:api_user, organization: organization) }
+          let(:author) { create(:api_user, organization:) }
         end
 
         describe "when the form is not valid" do
@@ -52,11 +52,11 @@ module Decidim
 
           it "creates a new comment" do
             expect(Comment).to receive(:create!).with(
-              { author: author,
-                commentable: commentable,
+              { author:,
+                commentable:,
                 root_commentable: commentable,
                 body: { en: body },
-                alignment: alignment,
+                alignment:,
                 decidim_user_group_id: user_group_id,
                 participatory_space: form.current_component.try(:participatory_space) }
             ).and_call_original
@@ -73,12 +73,10 @@ module Decidim
           end
 
           it "calls content processors" do
-            # rubocop:disable Rspec/VerifiedDoubleReference
             user_parser = instance_double("kind of UserParser", users: [])
             user_group_parser = instance_double("kind of UserGroupParser", groups: [])
             parsed_metadata = { user: user_parser, user_group: user_group_parser }
             parser = instance_double("kind of parser", rewrite: "whatever", metadata: parsed_metadata)
-            # rubocop:enable Rspec/VerifiedDoubleReference
             allow(Decidim::ContentProcessor).to receive(:parse).with(
               form.body,
               current_organization: form.current_organization
@@ -119,17 +117,17 @@ module Decidim
           end
 
           context "and comment contains a user mention" do
-            let(:mentioned_user) { create(:user, organization: organization) }
+            let(:mentioned_user) { create(:user, organization:) }
             let(:parser_context) { { current_organization: organization } }
             let(:body) { ::Faker::Lorem.paragraph + " @#{mentioned_user.nickname}" }
 
             it "creates a new comment with user mention replaced" do
               expect(Comment).to receive(:create!).with(
-                { author: author,
-                  commentable: commentable,
+                { author:,
+                  commentable:,
                   root_commentable: commentable,
                   body: { en: Decidim::ContentProcessor.parse(body, parser_context).rewrite },
-                  alignment: alignment,
+                  alignment:,
                   decidim_user_group_id: user_group_id,
                   participatory_space: form.current_component.try(:participatory_space) }
               ).and_call_original
@@ -155,17 +153,17 @@ module Decidim
           end
 
           context "and comment contains a group mention" do
-            let(:mentioned_group) { create(:user_group, organization: organization) }
+            let(:mentioned_group) { create(:user_group, organization:) }
             let(:parser_context) { { current_organization: organization } }
             let(:body) { ::Faker::Lorem.paragraph + " @#{mentioned_group.nickname}" }
 
             it "creates a new comment with user_group mention replaced" do
               expect(Comment).to receive(:create!).with(
-                { author: author,
-                  commentable: commentable,
+                { author:,
+                  commentable:,
                   root_commentable: commentable,
                   body: { en: Decidim::ContentProcessor.parse(body, parser_context).rewrite },
-                  alignment: alignment,
+                  alignment:,
                   decidim_user_group_id: user_group_id,
                   participatory_space: form.current_component.try(:participatory_space) }
               ).and_call_original

@@ -8,9 +8,9 @@ module Decidim
       describe DestroyResult do
         subject { described_class.new(result, user) }
 
-        let(:result) { create :result }
+        let(:result) { create(:result) }
         let(:organization) { result.component.organization }
-        let(:user) { create :api_user, organization: organization }
+        let(:user) { create(:api_user, organization:) }
 
         context "when everything is ok" do
           it "destroys the result" do

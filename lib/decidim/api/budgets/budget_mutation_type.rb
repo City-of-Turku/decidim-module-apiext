@@ -59,10 +59,10 @@ module Decidim
         end
 
         def update_project(id:, attributes:)
-          project = object.projects.find_by(id: id)
+          project = object.projects.find_by(id:)
           return unless project
 
-          enforce_permission_to :update, :project, project: project
+          enforce_permission_to(:update, :project, project:)
 
           form = project_form_from(attributes)
           ::Decidim::Budgets::Admin::UpdateProject.call(form, project) do
@@ -82,10 +82,10 @@ module Decidim
         end
 
         def delete_project(id:)
-          project = object.projects.find_by(id: id)
+          project = object.projects.find_by(id:)
           return unless project
 
-          enforce_permission_to :destroy, :project, project: project
+          enforce_permission_to(:destroy, :project, project:)
 
           ::Decidim::Budgets::Admin::DestroyProject.call(project, current_user) do
             on(:ok) do
@@ -112,9 +112,9 @@ module Decidim
           ::Decidim::Budgets::Admin::ProjectForm.from_params(
             "project" => project_params(attributes, project)
           ).with_context(
-            current_organization: current_organization,
+            current_organization:,
             current_component: object.component,
-            current_user: current_user,
+            current_user:,
             budget: object
           )
         end

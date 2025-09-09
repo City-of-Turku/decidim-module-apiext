@@ -3,13 +3,13 @@
 require "spec_helper"
 require "devise/jwt/test_helpers"
 
-describe Decidim::Apiext::SessionsController, type: :controller do
+describe Decidim::Apiext::SessionsController do
   routes { Decidim::Api::Engine.routes }
 
   let(:organization) { create(:organization) }
   let(:api_key) { "userkey" }
   let(:api_secret) { "decidim123456789" }
-  let!(:user) { create(:api_user, organization: organization, api_key: api_key, api_secret: api_secret) }
+  let!(:user) { create(:api_user, organization:, api_key:, api_secret:) }
   let(:params) do
     {
       api_user: {
@@ -28,53 +28,53 @@ describe Decidim::Apiext::SessionsController, type: :controller do
   end
 
   before do
-    request.env["devise.mapping"] = ::Devise.mappings[:api_user]
-    request.env[::Warden::JWTAuth::Middleware::TokenDispatcher::ENV_KEY] = "warden-jwt_auth.token_dispatcher"
+    request.env["devise.mapping"] = Devise.mappings[:api_user]
+    request.env[Warden::JWTAuth::Middleware::TokenDispatcher::ENV_KEY] = "warden-jwt_auth.token_dispatcher"
     request.env["decidim.current_organization"] = organization
   end
 
   describe "sign in" do
     it "returns jwt_token when credentials are valid" do
-      expect(request.env[::Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY]).not_to be_present
-      post :create, params: params
+      expect(request.env[Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY]).not_to be_present
+      post(:create, params:)
       expect(response).to have_http_status(:ok)
-      expect(request.env[::Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY]).to be_present
-      parsed_response_body = JSON.parse(response.body)
-      expect(parsed_response_body["jwt_token"]).to eq(request.env[::Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY])
+      expect(request.env[Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY]).to be_present
+      parsed_response_body = response.parsed_body
+      expect(parsed_response_body["jwt_token"]).to eq(request.env[Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY])
     end
 
     it "returns 403 when credentials are invalid" do
       post :create, params: invalid_params
       expect(response).to have_http_status(:forbidden)
-      expect(request.env[::Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY]).not_to be_present
+      expect(request.env[Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY]).not_to be_present
     end
 
     it "renders resource witout jwt_token in body when Tokendispatcher::ENV_KEY is nil" do
-      request.env[::Warden::JWTAuth::Middleware::TokenDispatcher::ENV_KEY] = nil
-      post :create, params: params
-      expect(request.env[::Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY]).to be_present
-      parsed_response_body = JSON.parse(response.body)
+      request.env[Warden::JWTAuth::Middleware::TokenDispatcher::ENV_KEY] = nil
+      post(:create, params:)
+      expect(request.env[Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY]).to be_present
+      parsed_response_body = response.parsed_body
       expect(parsed_response_body.has_key?("jwt_token")).to be(false)
     end
 
     context "with force sign in enabled" do
       before do
-        allow(::Decidim::Apiext).to receive(:force_api_authentication).and_return(true)
+        allow(Decidim::Apiext).to receive(:force_api_authentication).and_return(true)
       end
 
       it "returns jwt_token when credentials are valid" do
-        expect(request.env[::Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY]).not_to be_present
-        post :create, params: params
+        expect(request.env[Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY]).not_to be_present
+        post(:create, params:)
         expect(response).to have_http_status(:ok)
-        expect(request.env[::Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY]).to be_present
-        parsed_response_body = JSON.parse(response.body)
-        expect(parsed_response_body["jwt_token"]).to eq(request.env[::Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY])
+        expect(request.env[Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY]).to be_present
+        parsed_response_body = response.parsed_body
+        expect(parsed_response_body["jwt_token"]).to eq(request.env[Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY])
       end
 
       it "returns 403 when credentials are invalid" do
         post :create, params: invalid_params
         expect(response).to have_http_status(:forbidden)
-        expect(request.env[::Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY]).not_to be_present
+        expect(request.env[Warden::JWTAuth::Hooks::PREPARED_TOKEN_ENV_KEY]).not_to be_present
       end
     end
   end

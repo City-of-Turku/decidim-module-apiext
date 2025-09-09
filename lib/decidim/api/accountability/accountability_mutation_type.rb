@@ -47,7 +47,7 @@ module Decidim
         end
 
         def update_result(attributes:, id:)
-          enforce_permission_to :update, :result, result: result(id: id)
+          enforce_permission_to :update, :result, result: result(id:)
 
           form = accountability_from_params(attributes)
           Decidim::Accountability::Admin::UpdateResult.call(form, @result) do
@@ -67,7 +67,7 @@ module Decidim
         end
 
         def delete_result(id:)
-          enforce_permission_to :destroy, :result, result: result(id: id)
+          enforce_permission_to :destroy, :result, result: result(id:)
 
           Decidim::Accountability::Admin::DestroyResult.call(@result, current_user) do
             on(:ok, result) do
@@ -77,7 +77,7 @@ module Decidim
         end
 
         def result(id:)
-          @result ||= Decidim::Accountability::Result.find_by(id: id, component: object)
+          @result ||= Decidim::Accountability::Result.find_by(id:, component: object)
         end
 
         private
@@ -100,9 +100,9 @@ module Decidim
           ::Decidim::Accountability::Admin::ResultForm.from_params(
             params
           ).with_context(
-            current_component: current_component,
-            current_user: current_user,
-            current_organization: current_organization
+            current_component:,
+            current_user:,
+            current_organization:
           )
         end
 

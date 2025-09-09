@@ -12,16 +12,16 @@ module Decidim
         include_context "with accountability graphql mutation"
 
         let(:model) { component }
-        let(:component) { create(:accountability_component, participatory_space: participatory_space) }
+        let(:component) { create(:accountability_component, participatory_space:) }
         let(:participatory_space) { create(:participatory_process, organization: current_organization) }
         let!(:current_user) { create(:user, :confirmed, :admin, organization: current_organization) }
-        let(:budgets_component) { create(:budgets_component, participatory_space: participatory_space) }
-        let(:proposal_component) { create(:proposal_component, participatory_space: participatory_space) }
+        let(:budgets_component) { create(:budgets_component, participatory_space:) }
+        let(:proposal_component) { create(:proposal_component, participatory_space:) }
 
         let(:projects) { create_list(:project, 2, component: budgets_component) }
         let(:proposals) { create_list(:proposal, 2, component: proposal_component) }
 
-        let(:status) { create(:status, component: component) }
+        let(:status) { create(:status, component:) }
 
         # let(:title) { { en: "dummy title" } }
         # let(:description) { { en: "Dummy title" } }
@@ -37,11 +37,11 @@ module Decidim
 
         let(:attributes) do
           {
-            title: title,
-            description: description,
+            title:,
+            description:,
             startDate: start_date.to_date.iso8601,
             endDate: end_date.to_date.iso8601,
-            progress: progress,
+            progress:,
             externalId: external_id,
             statusId: status.id,
             scopeId: scope.id,
@@ -68,7 +68,7 @@ module Decidim
         end
 
         describe "update" do
-          let!(:result) { create(:result, component: component) }
+          let!(:result) { create(:result, component:) }
 
           let(:query) { "{ updateResult(id: #{result.id}, attributes: #{attributes_to_graphql(attributes)}) { id } }" }
 
@@ -84,7 +84,7 @@ module Decidim
         end
 
         describe "destroy" do
-          let!(:result) { create(:result, component: component) }
+          let!(:result) { create(:result, component:) }
           let(:query) { "{ deleteResult(id: #{result.id}) { id } }" }
 
           it_behaves_like "when the user does not have permissions"

@@ -11,8 +11,8 @@ module Decidim
         include_context "with a graphql class type"
         include_context "with a graphql class type"
 
-        let(:model) { create(:result, component: component) }
-        let(:component) { create(:accountability_component, participatory_space: participatory_space) }
+        let(:model) { create(:result, component:) }
+        let(:component) { create(:accountability_component, participatory_space:) }
         let(:participatory_space) { create(:participatory_process, organization: current_organization) }
         let!(:current_user) { create(:user, :confirmed, :admin, organization: current_organization) }
 
@@ -22,8 +22,8 @@ module Decidim
         let(:attributes) do
           {
             entryDate: entry_date.to_date.iso8601,
-            title: title,
-            description: description
+            title:,
+            description:
           }
         end
 

@@ -41,7 +41,7 @@ module Decidim
           ).with_context(
             current_component: object.component,
             current_organization: object.organization,
-            current_user: current_user
+            current_user:
           )
 
           ::Decidim::Proposals::Admin::AnswerProposal.call(form, object) do

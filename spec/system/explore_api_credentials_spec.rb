@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "explore api credentials", type: :system do
+describe "APICredentials" do
   let(:admin) { create(:admin) }
   let!(:organization) { create(:organization) }
   let!(:organization1) { create(:organization) }
@@ -19,7 +19,7 @@ describe "explore api credentials", type: :system do
   it "API credentials index" do
     within "nav.main-nav" do
       expect(page).to have_link("API credentials", href: "/system/api_users")
-      click_link "API credentials"
+      click_link_or_button "API credentials"
       li_element = find("li.active")
       within li_element do
         expect(page).to have_link("API credentials", href: "/system/api_users")
@@ -38,7 +38,7 @@ describe "explore api credentials", type: :system do
   end
 
   context "with api_users" do
-    let!(:set) { create_list(:api_user, 3, organization: organization) }
+    let!(:set) { create_list(:api_user, 3, organization:) }
     let!(:set1) { create_list(:api_user, 4, organization: organization1) }
 
     before do
@@ -68,17 +68,17 @@ describe "explore api credentials", type: :system do
       within "table.stack" do
         delete_tr = find("td", text: deleting_user.api_key).find(:xpath, "..")
         within delete_tr do
-          click_link "Remove user"
+          click_link_or_button "Remove user"
         end
       end
       expect(page).to have_content("Are you sure you want to remove this API user?")
       within "#confirm-modal" do
-        click_button "OK"
+        click_link_or_button "OK"
       end
       expect(page).to have_content("API user successfully deleted.")
       expect(page).to have_current_path("/system/api_users")
-      expect(::Decidim::Apiext::ApiUser.count).to eq(6)
-      expect(page).not_to have_content(deleting_user.api_key)
+      expect(Decidim::Apiext::ApiUser.count).to eq(6)
+      expect(page).to have_no_content(deleting_user.api_key)
     end
 
     it "refreshes the token" do
@@ -86,41 +86,41 @@ describe "explore api credentials", type: :system do
       refreshing_tr = find("td", text: refreshing_user.api_key).find(:xpath, "..")
 
       within refreshing_tr do
-        click_link "Refresh secret"
+        click_link_or_button "Refresh secret"
       end
 
       expect(page).to have_content("Are you sure you want to refresh the secret for this API user?")
 
       within "#confirm-modal" do
-        click_button "OK"
+        click_link_or_button "OK"
       end
 
       expect(page).to have_content("Token refreshed successfully.")
       expect(page).to have_current_path("/system/api_users")
-      expect(::Decidim::Apiext::ApiUser.count).to eq(7)
+      expect(Decidim::Apiext::ApiUser.count).to eq(7)
       within refreshing_tr do
         expect(page).to have_button("Copy secret")
       end
-      click_button("Copy secret")
+      click_link_or_button("Copy secret")
       expect(page).to have_content("Copied")
     end
 
     it "creates new api user" do
-      click_link "New API user"
+      click_link_or_button "New API user"
       expect(page).to have_current_path("/system/api_users/new")
       expect(page).to have_content("Create new API user")
       expect(page).to have_content("Select your organization")
-      click_button "Create"
+      click_link_or_button "Create"
       expect(page).to have_current_path("/system/api_users/new")
       select organization.host, from: "admin_organization"
-      click_button "Create"
+      click_link_or_button "Create"
       expect(page).to have_current_path("/system/api_users/new")
       fill_in "Name", with: "Dummy name"
       within "select#admin_organization" do
         expect(page).to have_css("option", text: organization.host)
         expect(page).to have_css("option", text: organization.host)
       end
-      click_button "Create"
+      click_link_or_button "Create"
       expect(page).to have_content("API user created successfully.")
       current_url = URI.parse(page.current_path)
       expect(current_url.path).to eq("/system/api_users")
@@ -132,8 +132,8 @@ describe "explore api credentials", type: :system do
           expect(page).to have_css("button[data-controller='clipboard-copy']", text: "Copy secret")
         end
       end
-      click_button "Copy secret"
-      expect(page).not_to have_link("Copy secret")
+      click_link_or_button "Copy secret"
+      expect(page).to have_no_link("Copy secret")
       expect(page).to have_content("Copied")
     end
   end

@@ -2,9 +2,9 @@
 
 shared_examples "create budget mutation examples" do
   it "creates the budget" do
-    expect { response }.to change(::Decidim::Budgets::Budget, :count).by(1)
+    expect { response }.to change(Decidim::Budgets::Budget, :count).by(1)
 
-    budget = ::Decidim::Budgets::Budget.last
+    budget = Decidim::Budgets::Budget.last
     expect(response["createBudget"]).to eq("id" => budget.id.to_s)
 
     expect(budget.title).to match(attributes[:title].stringify_keys)
@@ -17,9 +17,9 @@ end
 
 shared_examples "update budget mutation examples" do
   it "updates the budget" do
-    expect { response }.not_to change(::Decidim::Budgets::Budget, :count)
+    expect { response }.not_to change(Decidim::Budgets::Budget, :count)
 
-    budget = ::Decidim::Budgets::Budget.order(:id).last
+    budget = Decidim::Budgets::Budget.order(:id).last
     expect(response["updateBudget"]).to eq("id" => budget.id.to_s)
 
     expect(budget.title).to match(attributes[:title].stringify_keys)

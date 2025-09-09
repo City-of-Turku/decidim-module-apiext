@@ -10,7 +10,7 @@ module Decidim
       describe BudgetsMutationType do
         include_context "with a graphql class type"
 
-        let(:model) { create(:budgets_component, participatory_space: participatory_space) }
+        let(:model) { create(:budgets_component, participatory_space:) }
         let(:participatory_space) { create(:participatory_process, organization: current_organization) }
 
         let(:budgets) { create_list(:budgets, 3, component: model) }

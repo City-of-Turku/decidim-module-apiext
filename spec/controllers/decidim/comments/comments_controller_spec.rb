@@ -4,13 +4,13 @@ require "spec_helper"
 
 module Decidim
   module Comments
-    describe CommentsController, type: :controller do
+    describe CommentsController do
       routes { Decidim::Comments::Engine.routes }
 
       let(:organization) { create(:organization) }
-      let(:participatory_process) { create :participatory_process, organization: organization }
+      let(:participatory_process) { create(:participatory_process, organization:) }
       let(:component) { create(:component, participatory_space: participatory_process) }
-      let(:commentable) { create(:dummy_resource, component: component) }
+      let(:commentable) { create(:dummy_resource, component:) }
 
       before do
         request.env["decidim.current_organization"] = organization
@@ -32,7 +32,7 @@ module Decidim
         end
 
         context "when the user is signed in" do
-          let(:user) { create(:api_user, locale: "en", organization: organization) }
+          let(:user) { create(:api_user, locale: "en", organization:) }
           let(:comment) { Decidim::Comments::Comment.last }
 
           before do
@@ -70,7 +70,7 @@ module Decidim
           end
 
           context "when trying to comment on a private space where the user is not assigned to" do
-            let(:participatory_process) { create :participatory_process, :private, organization: organization }
+            let(:participatory_process) { create(:participatory_process, :private, organization:) }
 
             it "redirects with a flash alert" do
               post :create, xhr: true, params: { comment: comment_params }
@@ -155,9 +155,9 @@ module Decidim
       end
 
       describe "DELETE destroy" do
-        let(:user) { create(:api_user, locale: "en", organization: organization) }
-        let(:comment_author) { create(:user, :confirmed, locale: "en", organization: organization) }
-        let!(:comment) { create(:comment, commentable: commentable, author: comment_author) }
+        let(:user) { create(:api_user, locale: "en", organization:) }
+        let(:comment_author) { create(:user, :confirmed, locale: "en", organization:) }
+        let!(:comment) { create(:comment, commentable:, author: comment_author) }
 
         it "redirects to sign in path" do
           expect do

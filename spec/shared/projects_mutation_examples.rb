@@ -21,9 +21,9 @@ end
 
 shared_examples "create project mutation examples" do
   it "creates the project" do
-    expect { response }.to change(::Decidim::Budgets::Project, :count).by(1)
+    expect { response }.to change(Decidim::Budgets::Project, :count).by(1)
 
-    project = ::Decidim::Budgets::Project.order(:id).last
+    project = Decidim::Budgets::Project.order(:id).last
     expect(response["createProject"]).to eq("id" => project.id.to_s)
 
     expect(project.title).to match(attributes[:title].stringify_keys)

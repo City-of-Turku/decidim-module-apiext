@@ -13,7 +13,7 @@ module Decidim
 
         def proposal(id:)
           # TODO: Add other conditions to exclude the non-editable proposals similarly as in the core
-          Decidim::Proposals::Proposal.find_by(id: id, component: object)
+          Decidim::Proposals::Proposal.find_by(id:, component: object)
         end
       end
     end

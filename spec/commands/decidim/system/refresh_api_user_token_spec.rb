@@ -9,8 +9,8 @@ module Decidim
 
       let(:command) { subject.call }
       let(:api_user) { create(:api_user) }
-      let(:organization) { create :organization }
-      let(:admin) { create :admin }
+      let(:organization) { create(:organization) }
+      let(:admin) { create(:admin) }
       let(:valid) { true }
       let(:name) { "Dummy name" }
       let(:dummy_token) { "Dummy token" }

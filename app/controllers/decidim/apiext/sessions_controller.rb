@@ -34,9 +34,9 @@ module Decidim
           # to get the bearer token. This allows them to get it from the request
           # body instead.
           return render json: resource.serializable_hash.merge(
-            jwt_token: jwt_token,
+            jwt_token:,
             "avatar" => nil
-          ), status: status
+          ), status:
         end
 
         # Since avatar can be ActiveStorage object now, it can cause infinite loop

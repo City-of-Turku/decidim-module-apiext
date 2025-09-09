@@ -8,8 +8,8 @@ module Decidim
       subject { described_class.new(form, admin) }
 
       let(:command) { subject.call }
-      let(:organization) { create :organization }
-      let(:admin) { create :admin }
+      let(:organization) { create(:organization) }
+      let(:admin) { create(:admin) }
       let(:valid) { true }
       let(:name) { "Dummy name" }
       let(:dummy_token) { "Dummy token" }
@@ -18,7 +18,7 @@ module Decidim
         double(
           valid?: valid,
           organization: organization.id,
-          name: name
+          name:
         )
       end
 

@@ -13,7 +13,7 @@ module Decidim
         let(:current_user) { create(:api_user) }
         let(:form) do
           ProposalAnswerForm.from_params(form_params).with_context(
-            current_user: current_user,
+            current_user:,
             current_component: proposal.component,
             current_organization: proposal.component.organization
           )
@@ -96,7 +96,7 @@ module Decidim
         end
 
         context "when proposal answer should not be published immediately" do
-          let(:proposal) { create(:proposal, component: component) }
+          let(:proposal) { create(:proposal, component:) }
           let(:component) { create(:proposal_component, :without_publish_answers_immediately) }
 
           it "broadcasts ok" do
@@ -121,8 +121,8 @@ module Decidim
 
         context "when proposal answered" do
           shared_context "with correct user scoping in notification digest mail" do
-            let!(:component) { create(:proposal_component, organization: organization) }
-            let!(:record) { create(:proposal, component: component, users: [user], title: { en: "Event notifier" }) }
+            let!(:component) { create(:proposal_component, organization:) }
+            let!(:record) { create(:proposal, component:, users: [user], title: { en: "Event notifier" }) }
 
             let!(:form) do
               Decidim::Proposals::Admin::ProposalAnswerForm.from_params(form_params).with_context(
@@ -134,7 +134,7 @@ module Decidim
 
             let(:form_params) do
               {
-                internal_state: internal_state,
+                internal_state:,
                 answer: { en: "Example answer" },
                 cost: 2000,
                 cost_report: { en: "Example report" },

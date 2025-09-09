@@ -7,9 +7,9 @@ module Decidim
       describe DestroyBudget do
         subject { described_class.new(budget, user) }
 
-        let!(:budget) { create :budget }
+        let!(:budget) { create(:budget) }
         let(:organization) { budget.component.organization }
-        let(:user) { create :api_user, organization: organization }
+        let(:user) { create(:api_user, organization:) }
 
         it "destroys the budget" do
           expect { subject.call }.to change(Decidim::Budgets::Budget, :count).by(-1)
@@ -28,7 +28,7 @@ module Decidim
         end
 
         context "when the budget has projects" do
-          let!(:project) { create :project, budget: budget }
+          let!(:project) { create(:project, budget:) }
 
           it "is not valid" do
             expect { subject.call }.to broadcast(:invalid)

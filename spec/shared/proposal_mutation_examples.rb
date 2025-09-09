@@ -35,14 +35,14 @@ shared_examples "manage proposal mutation examples" do
               state: "accepted"
               cost: #{cost}
               costReport: {
-                en: \"#{cost_report[:en]}\",
-                fi: \"#{cost_report[:fi]}\",
-                sv: \"#{cost_report[:sv]}\"
+                en: "#{cost_report[:en]}",
+                fi: "#{cost_report[:fi]}",
+                sv: "#{cost_report[:sv]}"
               }
               executionPeriod: {
-                en: \"#{execution_period[:en]}\",
-                fi: \"#{execution_period[:fi]}\",
-                sv: \"#{execution_period[:sv]}\"
+                en: "#{execution_period[:en]}",
+                fi: "#{execution_period[:fi]}",
+                sv: "#{execution_period[:sv]}"
               }
             )
             {
@@ -52,19 +52,19 @@ shared_examples "manage proposal mutation examples" do
           }
         )
       end
-      let(:cost) { ::Faker::Number.between(from: 1, to: 100_000.0).round(2).to_f }
+      let(:cost) { Faker::Number.between(from: 1, to: 100_000.0).round(2).to_f }
       let(:cost_report) do
         {
-          en: ::Faker::Lorem.paragraph,
-          fi: ::Faker::Lorem.paragraph,
-          sv: ::Faker::Lorem.paragraph
+          en: Faker::Lorem.paragraph,
+          fi: Faker::Lorem.paragraph,
+          sv: Faker::Lorem.paragraph
         }
       end
       let(:execution_period) do
         {
-          en: ::Faker::Lorem.paragraph,
-          fi: ::Faker::Lorem.paragraph,
-          sv: ::Faker::Lorem.paragraph
+          en: Faker::Lorem.paragraph,
+          fi: Faker::Lorem.paragraph,
+          sv: Faker::Lorem.paragraph
         }
       end
 

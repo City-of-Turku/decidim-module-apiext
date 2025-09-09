@@ -20,11 +20,11 @@ module Decidim
           %(
             {
               answer(
-                state: \"#{state}\",
+                state: "#{state}",
                 answerContent: {
-                  en: \"#{answer_en}\",
-                  fi: \"#{answer_fi}\",
-                  sv: \"#{answer_sv}\"
+                  en: "#{answer_en}",
+                  fi: "#{answer_fi}",
+                  sv: "#{answer_sv}"
                 }
               ){
                   id

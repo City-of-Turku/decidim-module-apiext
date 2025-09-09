@@ -89,7 +89,7 @@ A typical mutation would be like:
         end
 
         def budget(id:)
-          @budget ||= Decidim::Budgets::Budget.find_by(id: id, component: object)
+          @budget ||= Decidim::Budgets::Budget.find_by(id:, component: object)
         end
 
         def create_budget(attributes:)
@@ -104,7 +104,7 @@ A typical mutation would be like:
           ).with_context(
             current_component: object,
             current_organization: object.organization,
-            current_user: current_user
+            current_user:
           )
 
           ::Decidim::Budgets::Admin::CreateBudget.call(form) do
@@ -125,7 +125,7 @@ A typical mutation would be like:
         end
 
         def update_budget(attributes:, id:)
-          enforce_permission_to :update, :budget, budget: budget(id: id)
+          enforce_permission_to :update, :budget, budget: budget(id:)
 
           form = ::Decidim::Budgets::Admin::BudgetForm.from_params(
             weight: attributes.weight,
@@ -136,7 +136,7 @@ A typical mutation would be like:
           ).with_context(
             current_component: object,
             current_organization: object.organization,
-            current_user: current_user
+            current_user:
           )
           ::Decidim::Budgets::Admin::UpdateBudget.call(form, @budget) do
             on(:ok, budget) do
@@ -156,7 +156,7 @@ A typical mutation would be like:
         end
 
         def delete_budget(id:)
-          enforce_permission_to :update, :budget, budget: budget(id: id)
+          enforce_permission_to :update, :budget, budget: budget(id:)
           ::Decidim::Budgets::Admin::DestroyBudget.call(@budget, current_user) do
             on(:ok, budget) do
               return budget
