@@ -41,6 +41,17 @@ module Decidim
         super || I18n.t("decidim.anonymous_user")
       end
 
+      # Whether the user is confirmed. All API users are confirmed.
+      def confirmed?
+        true
+      end
+
+      # API users are not blocked at any point as they are managed by system
+      # admins.
+      def blocked?
+        false
+      end
+
       # Check if the user account has been deleted or not
       def deleted?
         deleted_at.present?
