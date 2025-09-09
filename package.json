@@ -1,0 +1,24 @@
+{
+  "name": "decidim-apiext",
+  "version": "0.1.0",
+  "description": "API extensions for Decidim.",
+  "private": true,
+  "license": "AGPL-3.0",
+  "scripts": {
+    "lint": "eslint -c .eslintrc.json --no-error-on-unmatched-pattern --ignore-pattern app/packs/vendor --ext .js app/packs",
+    "stylelint": "stylelint app/packs/**/*.scss"
+  },
+  "dependencies": {
+    "@decidim/browserslist-config": "^0.28.6",
+    "@decidim/webpacker": "^0.28.6"
+  },
+  "devDependencies": {
+    "@decidim/dev": "^0.28.6",
+    "@decidim/eslint-config": "^0.28.6",
+    "@decidim/prettier-config": "^0.28.6",
+    "@decidim/stylelint-config": "^0.28.6"
+  },
+  "browserslist": [
+    "extends @decidim/browserslist-config"
+  ]
+}
