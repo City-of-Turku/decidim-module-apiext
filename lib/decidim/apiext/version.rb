@@ -2,7 +2,12 @@
 
 module Decidim
   module Apiext
-    VERSION = "0.27.0"
-    DECIDIM_VERSION = "~> 0.27.0"
+    def self.decidim_version
+      "~> 0.28.0"
+    end
+
+    def self.version
+      "0.28.0"
+    end
   end
 end

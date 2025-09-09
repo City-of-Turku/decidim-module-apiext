@@ -7,14 +7,14 @@ require "decidim/apiext/version"
 Gem::Specification.new do |spec|
   spec.metadata = { "rubygems_mfa_required" => "true" }
   spec.name = "decidim-apiext"
-  spec.version = Decidim::Apiext::VERSION
-  spec.required_ruby_version = ">= 3.0"
+  spec.version = Decidim::Apiext.version
+  spec.required_ruby_version = ">= 3.1"
   spec.authors = ["Antti Hukkanen", "Sina Eftekhar"]
-  spec.email = ["sina.eftekhar@mainiotech.fi"]
+  spec.email = ["info@mainiotech.fi"]
 
   spec.summary = "Provides API extensions to Decidim."
   spec.description = "Adds some extensions to the current Api in decidim."
-  spec.homepage = "https://github.com/mainio/decidim-module-apiext"
+  spec.homepage = "https://github.com/City-of-Turku/decidim-module-apiext"
   spec.license = "AGPL-3.0"
 
   spec.files = Dir[
@@ -26,9 +26,7 @@ Gem::Specification.new do |spec|
 
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "decidim-api", Decidim::Apiext::DECIDIM_VERSION
-  spec.add_dependency "decidim-core", Decidim::Apiext::DECIDIM_VERSION
-  spec.add_dependency "devise-jwt", "~> 0.11.0"
-
-  spec.add_development_dependency "decidim-dev", Decidim::Apiext::DECIDIM_VERSION
+  spec.add_dependency "decidim-api", Decidim::Apiext.decidim_version
+  spec.add_dependency "decidim-core", Decidim::Apiext.decidim_version
+  spec.add_dependency "devise-jwt", "~> 0.12.1"
 end

@@ -10,28 +10,34 @@ base_path = ""
 base_path = "../" if File.basename(__dir__) == "development_app"
 require_relative "#{base_path}lib/decidim/apiext/version"
 
-DECIDIM_VERSION = Decidim::Apiext::DECIDIM_VERSION
+DECIDIM_VERSION = Decidim::Apiext.decidim_version
 
 gem "decidim", DECIDIM_VERSION
 gem "decidim-apiext", path: "."
 
+gem "decidim-apifiles", github: "mainio/decidim-module-apifiles", branch: "main"
+
 gem "bootsnap", "~> 1.4"
-gem "decidim-apifiles", github: "mainio/decidim-module-apifiles", branch: "release/0.27-stable"
-gem "puma", ">= 5.0.0"
-gem "uglifier", "~> 4.1"
+gem "puma", ">= 6.6.1"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
+
   gem "decidim-dev", DECIDIM_VERSION
-  gem "faker", "~> 2.14"
+
+  gem "faker", "~> 3.5"
+
+  # rubocop & rubocop-rspec are set to the following versions because of a
+  # change where FactoryBot/CreateList must be a boolean instead of contextual.
+  # These version locks can be removed when this problem is handled through
+  # decidim-dev.
+  gem "rubocop", "~> 1.28"
   gem "rubocop-faker"
-  gem "rubocop-performance", "~> 1.6.0"
+  gem "rubocop-rspec", "2.20"
 end
 
 group :development do
-  gem "letter_opener_web", "~> 1.3"
+  gem "letter_opener_web", "~> 2.0"
   gem "listen", "~> 3.1"
-  gem "spring", "~> 2.0"
-  gem "spring-watcher-listen", "~> 2.0"
-  gem "web-console", "~> 3.5"
+  gem "web-console", "~> 4.2"
 end
