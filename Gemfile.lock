@@ -645,7 +645,7 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rexml (3.4.2)
+    rexml (3.4.1)
     rspec (3.13.1)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -827,6 +827,7 @@ DEPENDENCIES
   letter_opener_web (~> 2.0)
   listen (~> 3.1)
   puma (>= 6.6.1)
+  rexml (= 3.4.1)
   rubocop (~> 1.28)
   rubocop-faker
   rubocop-rspec (= 2.20)
