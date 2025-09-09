@@ -31,8 +31,9 @@ describe "explore api credentials", type: :system do
       expect(ths[0]).to have_content("Organization")
       expect(ths[1]).to have_content("Name")
       expect(ths[2]).to have_content("Key")
-      expect(ths[3]).to have_content("Created at")
-      expect(ths[4]).to have_content("Actions")
+      expect(ths[3]).to have_content("Secret")
+      expect(ths[4]).to have_content("Created at")
+      expect(ths[5]).to have_content("Actions")
     end
   end
 
@@ -54,8 +55,8 @@ describe "explore api credentials", type: :system do
           expect(tds.first).to have_content(user.organization.host)
           expect(tds[1]).to have_content(user.name)
           expect(tds[2]).to have_content(user.api_key)
-          expect(tds.last).to have_link("Revoke token")
-          expect(tds.last).to have_link("Refresh token")
+          expect(tds.last).to have_link("Remove user")
+          expect(tds.last).to have_link("Refresh secret")
         end
       end
       expect(page).to have_link("New API user")
@@ -67,11 +68,13 @@ describe "explore api credentials", type: :system do
       within "table.stack" do
         delete_tr = find("td", text: deleting_user.api_key).find(:xpath, "..")
         within delete_tr do
-          click_link "Revoke token"
+          click_link "Remove user"
         end
       end
-      expect(page).to have_content("Are you sure you want to revoke this API user?")
-      click_link "OK"
+      expect(page).to have_content("Are you sure you want to remove this API user?")
+      within "#confirm-modal" do
+        click_button "OK"
+      end
       expect(page).to have_content("API user successfully deleted.")
       expect(page).to have_current_path("/system/api_users")
       expect(::Decidim::Apiext::ApiUser.count).to eq(6)
@@ -83,16 +86,22 @@ describe "explore api credentials", type: :system do
       refreshing_tr = find("td", text: refreshing_user.api_key).find(:xpath, "..")
 
       within refreshing_tr do
-        click_link "Refresh token"
+        click_link "Refresh secret"
+      end
+
+      expect(page).to have_content("Are you sure you want to refresh the secret for this API user?")
+
+      within "#confirm-modal" do
+        click_button "OK"
       end
 
       expect(page).to have_content("Token refreshed successfully.")
-      expect(page).to have_current_path("/system/api_users?api_user=#{refreshing_user.id}&token=#{dummy_token}")
+      expect(page).to have_current_path("/system/api_users")
       expect(::Decidim::Apiext::ApiUser.count).to eq(7)
       within refreshing_tr do
-        expect(page).to have_link("Copy token")
+        expect(page).to have_button("Copy secret")
       end
-      click_link("Copy token")
+      click_button("Copy secret")
       expect(page).to have_content("Copied")
     end
 
@@ -120,11 +129,11 @@ describe "explore api credentials", type: :system do
         new_tr = find("td", text: "Dummy name").find(:xpath, "..")
         within new_tr do
           expect(page).to have_content(dummy_token)
-          expect(page).to have_css("a#api-user-token", text: "Copy token")
+          expect(page).to have_css("button[data-controller='clipboard-copy']", text: "Copy secret")
         end
       end
-      click_link "Copy token"
-      expect(page).not_to have_link("Copy token")
+      click_button "Copy secret"
+      expect(page).not_to have_link("Copy secret")
       expect(page).to have_content("Copied")
     end
   end

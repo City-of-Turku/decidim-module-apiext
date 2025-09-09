@@ -30,7 +30,7 @@ module Decidim
         let(:query) { "{ badge }" }
 
         context "when the user is officialized" do
-          let(:model) { create(:user, :officialized) }
+          let(:model) { create(:user, :confirmed, :officialized) }
 
           it "returns the icon to use for the verification badge" do
             expect(response).to include("badge" => "verified-badge")
@@ -38,7 +38,7 @@ module Decidim
         end
 
         context "when the user is not officialized" do
-          let(:model) { create(:user) }
+          let(:model) { create(:user, :confirmed) }
 
           it "returns empty" do
             expect(response).to include("badge" => "")
@@ -62,10 +62,10 @@ module Decidim
         end
 
         context "when user is deleted" do
-          let(:model) { create(:user, :deleted) }
+          let(:model) { create(:user, :confirmed, :deleted) }
 
-          it "returns empty" do
-            expect(response).to include("profilePath" => "")
+          it "returns nothing" do
+            expect(response).to be_nil
           end
         end
       end

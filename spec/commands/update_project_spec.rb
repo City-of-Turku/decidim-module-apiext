@@ -37,6 +37,7 @@ module Decidim
             current_user: current_user,
             title: { en: "title" },
             description: { en: "description" },
+            budget: budget,
             budget_amount: 10_000_000,
             proposal_ids: proposals.map(&:id),
             scope: scope,

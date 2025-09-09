@@ -8,7 +8,7 @@ module Decidim
     describe ParticipantDetailsType do
       include_context "with a graphql class type"
 
-      let(:model) { create(:user, organization: current_organization) }
+      let(:model) { create(:user, :confirmed, organization: current_organization) }
       let(:current_organization) { create(:organization) }
       let(:api_user) { create(:api_user, organization: current_organization) }
       let(:admin_user) { create(:user, :admin, :confirmed, organization: current_organization) }
