@@ -56,6 +56,16 @@ module Decidim
           ::Decidim::Accountability::ResultType.include(
             ::Decidim::Apiext::ResultTypeExtensions
           )
+
+          if Decidim.module_installed?(:accountability)
+            # permissions
+            Decidim::Accountability::Permissions.include(AccountabilityPermissionsExtensions)
+          end
+
+          if Decidim.module_installed?(:budgets)
+            # permissions
+            Decidim::Budgets::Permissions.include(BudgetsPermissionsExtensions)
+          end
         end
       end
 
