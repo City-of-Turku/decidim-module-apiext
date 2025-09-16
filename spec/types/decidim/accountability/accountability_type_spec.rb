@@ -10,7 +10,7 @@ describe Decidim::Accountability::AccountabilityType, type: :graphql do
 
   let(:model) { current_component }
   let(:participatory_space) { create(:participatory_process, organization: current_organization) }
-  let(:current_component) { create(:accountability_component, participatory_space:) }
+  let(:current_component) { create(:accountability_component, participatory_space: participatory_space) }
 
   describe "statuses" do
     # create(:status, component: current_component, key: "ongoing", name: { en: "Ongoing" })
