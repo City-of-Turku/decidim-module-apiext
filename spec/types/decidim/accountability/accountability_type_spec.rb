@@ -3,8 +3,8 @@
 require "spec_helper"
 require "decidim/api/test/type_context"
 
-# This test is here to test the local fix for this bug:
-# https://github.com/decidim/decidim/pull/15170
+# This test is here to test the local fix for a missing feature:
+# https://github.com/decidim/decidim/pull/15189
 describe Decidim::Accountability::AccountabilityType, type: :graphql do
   include_context "with a graphql class type"
 
@@ -13,7 +13,6 @@ describe Decidim::Accountability::AccountabilityType, type: :graphql do
   let(:current_component) { create(:accountability_component, participatory_space:) }
 
   describe "statuses" do
-    # create(:status, component: current_component, key: "ongoing", name: { en: "Ongoing" })
     let!(:statuses) { create_list(:status, 5, component: current_component) }
     let(:query) do
       %(
