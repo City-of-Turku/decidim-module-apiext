@@ -58,6 +58,10 @@ module Decidim
           )
 
           if Decidim.module_installed?(:accountability)
+            ::Decidim::Accountability::AccountabilityType.include(
+              ::Decidim::Apiext::AccountabilityTypeExtensions
+            )
+
             # permissions
             Decidim::Accountability::Permissions.include(AccountabilityPermissionsExtensions)
           end
