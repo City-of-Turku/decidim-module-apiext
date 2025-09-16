@@ -15,6 +15,7 @@ module Decidim
     autoload :QueryExtensions, "decidim/apiext/query_extensions"
     autoload :AuthorInterfaceExtensions, "decidim/apiext/author_interface_extensions"
     autoload :ProjectTypeExtensions, "decidim/apiext/project_type_extensions"
+    autoload :AccountabilityTypeExtensions, "decidim/apiext/accountability_type_extensions"
     autoload :ResultTypeExtensions, "decidim/apiext/result_type_extensions"
     autoload :BudgetTypeExtensions, "decidim/apiext/budget_type_extensions"
 

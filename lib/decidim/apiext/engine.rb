@@ -56,6 +56,9 @@ module Decidim
           ::Decidim::Accountability::ResultType.include(
             ::Decidim::Apiext::ResultTypeExtensions
           )
+          ::Decidim::Accountability::AccountabilityType.include(
+            ::Decidim::Apiext::AccountabilityTypeExtensions
+          )
         end
       end
 
