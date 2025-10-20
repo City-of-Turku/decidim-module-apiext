@@ -7,6 +7,12 @@ module Decidim
         type.field :project, Decidim::Budgets::ProjectType, "The project for this budget", null: true do
           argument :id, GraphQL::Types::ID, required: true
         end
+
+        type.define_singleton_method(:authorized?) do |object, context|
+          super(object, context) && (context[:current_user]&.admin? || object.visible?)
+        rescue Decidim::PermissionAction::PermissionNotSetError
+          false
+        end
       end
 
       def project(id:)
