@@ -18,6 +18,7 @@ module Decidim
     autoload :AccountabilityTypeExtensions, "decidim/apiext/accountability_type_extensions"
     autoload :ResultTypeExtensions, "decidim/apiext/result_type_extensions"
     autoload :BudgetTypeExtensions, "decidim/apiext/budget_type_extensions"
+    autoload :ProposalListHelperExtensions, "decidim/apiext/proposal_list_helper_extensions"
 
     include ActiveSupport::Configurable
 

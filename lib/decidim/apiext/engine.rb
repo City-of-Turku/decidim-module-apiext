@@ -59,6 +59,9 @@ module Decidim
           ::Decidim::Accountability::AccountabilityType.include(
             ::Decidim::Apiext::AccountabilityTypeExtensions
           )
+          ::Decidim::Proposals::ProposalListHelper.include(
+            Decidim::Apiext::ProposalListHelperExtensions
+          )
         end
       end
 
