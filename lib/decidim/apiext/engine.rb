@@ -29,6 +29,7 @@ module Decidim
 
       initializer "decidim_apiext.add_customizations", before: "decidim_comments.query_extensions" do
         config.to_prepare do
+          require_dependency "decidim/api/proposals_type"
           # commands
           ::Decidim::Budgets::Admin::UpdateProject.include(UpdateProjectExtensions)
 
