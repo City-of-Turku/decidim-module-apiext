@@ -6,7 +6,6 @@ module Decidim
       def query_scope
         super.published
           .not_hidden
-          .except_withdrawn
       end
     end
   end
