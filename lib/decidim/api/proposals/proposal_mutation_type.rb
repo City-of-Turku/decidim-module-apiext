@@ -23,6 +23,12 @@ module Decidim
           argument :execution_period, GraphQL::Types::JSON, description: "Report on the execution perioid", required: false
         end
 
+        field :update_classifications, type: Decidim::Proposals::ProposalType, null: true do
+          description: "Update scope and category of a proposal"
+          argument :scope_id, GraphQL::Types::ID, description: "Scope of the proposal", required: false
+          argument :category_id, GraphQL::Types::ID, description: "Category of the proposal", required: false
+        end
+
         def answer(state:, answer_content: nil, cost: nil, cost_report: nil, execution_period: nil)
           enforce_permission_to :create, :proposal_answer, proposal: object
 
@@ -58,6 +64,33 @@ module Decidim
               I18n.t("decidim.proposals.admin.proposals.answer.invalid")
             )
           end
+        end
+
+        def update_classifications(scope_id: nil, category_id: nil)
+          enforce_permission_to :update, :proposal, proposal: object
+
+          proposal_id = Array(object.id)
+          @error_messages = []
+
+          if scope_id
+            ::Decidim::Proposals::Admin::UpdateProposalScope.call(scope_id, proposal_id) do
+              on(:invalid_scope) do
+                @error_messages << I18n.t("proposals.update_scope.select_a_scope",
+                  scope: "decidim.proposals.admin") 
+              end
+            end
+          end
+          if category_id
+            ::Decidim::Proposals::Admin::UpdateProposalCategory.call(category_id, proposal_id) do
+              on(:invalid_category) do
+                @error_messages << I18n.t("proposals.update_category.select_a_category",
+                  scope: "decidim.proposals.admin")
+              end
+            end
+          end
+          return GraphQL::ExecutionError.new(@error_messages.join(", ")) if @error_messages.present?
+
+          object.reload
         end
       end
     end
