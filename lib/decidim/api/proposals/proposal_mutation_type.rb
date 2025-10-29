@@ -24,7 +24,7 @@ module Decidim
         end
 
         field :update_classifications, type: Decidim::Proposals::ProposalType, null: true do
-          description: "Update scope and category of a proposal"
+          description "Update scope and category of a proposal"
           argument :scope_id, GraphQL::Types::ID, description: "Scope of the proposal", required: false
           argument :category_id, GraphQL::Types::ID, description: "Category of the proposal", required: false
         end
