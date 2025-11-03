@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-shared_examples "manage proposal mutation examples" do
+shared_examples "manage proposal answer mutation examples" do
   context "when non admin user is logged in" do
     describe "try to answer to porposal" do
       it "raises error" do
@@ -79,6 +79,143 @@ shared_examples "manage proposal mutation examples" do
         expect(proposal.execution_period["en"]).to eq(execution_period[:en])
         expect(proposal.execution_period["fi"]).to eq(execution_period[:fi])
         expect(proposal.execution_period["sv"]).to eq(execution_period[:sv])
+      end
+    end
+  end
+end
+
+shared_examples "manage proposal classifications mutation examples" do
+  context "when non admin user is logged in" do
+    it "raises error" do
+      expect { response }.to raise_error(Decidim::Apiext::ActionForbidden)
+    end
+  end
+  context "when admin is logged in" do
+    before do
+      # rubocop:disable RSpec/AnyInstance
+      allow_any_instance_of(described_class).to receive(:current_user).and_return(user)
+      # rubocop:enable RSpec/AnyInstance
+    end
+
+    it "changes proposals scope and category" do
+      classification_response = response["updateClassifications"]
+      expect(classification_response).to include("id" => model.id.to_s)
+      expect(classification_response["scope"]).to include("id" => update_scope.id.to_s)
+      expect(classification_response["category"]).to include("id" => update_category.id.to_s)
+      
+      updated_proposal = Decidim::Proposals::Proposal.find(model.id)
+      expect(updated_proposal.category).to eq(update_category)
+      expect(updated_proposal.scope).to eq(update_scope)
+    end
+
+    it "sends notification to the author" do
+      expect(Decidim::EventsManager).to receive(:publish).with(
+        hash_including(event: "decidim.events.proposals.proposal_update_scope")
+      )
+      expect(Decidim::EventsManager).to receive(:publish).with(
+        hash_including(event: "decidim.events.proposals.proposal_update_category")
+      )
+
+      response
+    end
+
+    context "when category is not provided" do
+      let(:query) do
+        %(
+          {
+            updateClassifications(
+              scopeId: #{update_scope&.id}
+            ){
+                id
+                category {
+                  id
+                }
+                scope {
+                  id
+                }
+              }
+          }
+        )
+      end
+
+      it "does only updates scope" do
+        expect(api_response).to include("id" => model.id.to_s)
+        expect(api_response["scope"]).to include("id" => update_scope.id.to_s)
+        expect(api_response["category"]).to include("id" => categories.first.id.to_s)
+        
+        updated_proposal = Decidim::Proposals::Proposal.find(model.id)
+        expect(updated_proposal.category).to eq(categories.first)
+        expect(updated_proposal.scope).to eq(update_scope)
+      end
+
+      it "only sends the notification to the author about scope change" do
+        expect(Decidim::EventsManager).to receive(:publish).with(
+          hash_including(event: "decidim.events.proposals.proposal_update_scope")
+        )
+        expect(Decidim::EventsManager).not_to receive(:publish).with(
+          hash_including(event: "decidim.events.proposals.proposal_update_category")
+        )
+
+        response
+      end
+    end
+
+    context "when the category does not belong the same space" do
+      let!(:another_space) { create(:participatory_process, organization: model.organization) }
+      let!(:update_category) { create(:category, participatory_space: another_space)}
+
+      it "returns error" do
+        expect { api_response }.to raise_error(StandardError, /Please select a category/)
+      end
+    end
+
+    context "when scope is not provided" do
+      let(:query) do
+        %(
+          {
+            updateClassifications(
+              categoryId: #{update_category&.id}
+            ){
+                id
+                category {
+                  id
+                }
+                scope {
+                  id
+                }
+              }
+          }
+        )
+      end
+
+      it "does only updates category" do
+        expect(api_response).to include("id" => model.id.to_s)
+        expect(api_response["scope"]).to include("id" => scopes.first.id.to_s)
+        expect(api_response["category"]).to include("id" => update_category.id.to_s)
+        
+        updated_proposal = Decidim::Proposals::Proposal.find(model.id)
+        expect(updated_proposal.category).to eq(update_category)
+        expect(updated_proposal.scope).to eq(scopes.first)
+      end
+
+      it "only sends the notification to the author about category change" do
+        expect(Decidim::EventsManager).not_to receive(:publish).with(
+          hash_including(event: "decidim.events.proposals.proposal_update_scope")
+        )
+        expect(Decidim::EventsManager).to receive(:publish).with(
+          hash_including(event: "decidim.events.proposals.proposal_update_category")
+        )
+
+        response
+      end
+    end
+
+    context "when the scope does not belong the same organization" do
+      let!(:another_organization) { create(:organization) }
+      let!(:update_scope) { create(:scope, organization: another_organization)}
+
+      it "returns error" do
+        expect { api_response }.to raise_error(StandardError, /Please select a scope/)
       end
     end
   end

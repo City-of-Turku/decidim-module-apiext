@@ -3,7 +3,7 @@
 module Decidim
   module Apiext
     module Proposals
-      class ProposalMutationType < GraphQL::Schema::Object
+      class ProposalMutationType < Decidim::Api::Types::BaseObject
         include ::Decidim::Apiext::ApiPermissions
         include ::Decidim::Apiext::ApiMutationHelpers
 
@@ -23,8 +23,9 @@ module Decidim
           argument :execution_period, GraphQL::Types::JSON, description: "Report on the execution perioid", required: false
         end
 
-        field :update_classifications, type: Decidim::Proposals::ProposalType, null: true do
+        field :update_classifications, Decidim::Proposals::ProposalType, null: true do
           description "Update scope and category of a proposal"
+
           argument :scope_id, GraphQL::Types::ID, description: "Scope of the proposal", required: false
           argument :category_id, GraphQL::Types::ID, description: "Category of the proposal", required: false
         end
@@ -67,29 +68,28 @@ module Decidim
         end
 
         def update_classifications(scope_id: nil, category_id: nil)
-          enforce_permission_to :update, :proposal, proposal: object
+          enforce_permission_to :create, :proposal_answer, proposal: object
 
           proposal_id = Array(object.id)
-          @error_messages = []
-
+          error_messages = []
           if scope_id
-            ::Decidim::Proposals::Admin::UpdateProposalScope.call(scope_id, proposal_id) do
-              on(:invalid_scope) do
-                @error_messages << I18n.t("proposals.update_scope.select_a_scope",
-                  scope: "decidim.proposals.admin") 
-              end
+            begin
+              ::Decidim::Proposals::Admin::UpdateProposalScope.call(scope_id, proposal_id)
+            rescue ActiveRecord::RecordInvalid, StandardError => e
+              error_messages << I18n.t("proposals.update_scope.select_a_scope", scope: "decidim.proposals.admin")
             end
           end
-          if category_id
-            ::Decidim::Proposals::Admin::UpdateProposalCategory.call(category_id, proposal_id) do
-              on(:invalid_category) do
-                @error_messages << I18n.t("proposals.update_category.select_a_category",
-                  scope: "decidim.proposals.admin")
-              end
-            end
-          end
-          return GraphQL::ExecutionError.new(@error_messages.join(", ")) if @error_messages.present?
 
+          if category_id
+            begin
+              ::Decidim::Proposals::Admin::UpdateProposalCategory.call(category_id, proposal_id)
+            rescue ActiveRecord::RecordInvalid, StandardError => e
+              error_messages << I18n.t("proposals.update_category.select_a_category", scope: "decidim.proposals.admin")
+            end
+          end
+
+          return GraphQL::ExecutionError.new(error_messages.join(", ")) if error_messages.present?
+          
           object.reload
         end
       end
