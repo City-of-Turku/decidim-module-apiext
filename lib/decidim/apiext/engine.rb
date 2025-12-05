@@ -69,6 +69,9 @@ module Decidim
       initializer "decidim_apiext.mutation_and_query_extensions", after: "decidim.graphql_api" do
         Decidim::Api::MutationType.include(::Decidim::Apiext::MutationExtensions)
         Decidim::Api::QueryType.include(::Decidim::Apiext::QueryExtensions)
+        Decidim::Core::ComponentInterface.include(
+          Decidim::Apiext::ComponentInterfaceExtensions
+        )
       end
 
       initializer "decidim_apiext.add_devise_jwt_oath", after: "decidim.action_controller" do
