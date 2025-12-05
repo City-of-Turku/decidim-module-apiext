@@ -20,6 +20,7 @@ module Decidim
     autoload :BudgetTypeExtensions, "decidim/apiext/budget_type_extensions"
     autoload :CommentableInterfaceExtensions, "decidim/apiext/commentable_interface_extensions"
     autoload :ProjectTypeAuthorizationExtensions, "decidim/apiext/project_type_authorization_extensions"
+    autoload :ComponentInterfaceExtensions, "decidim/apiext/component_interface_extensions"
 
     include ActiveSupport::Configurable
 
