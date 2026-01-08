@@ -49,6 +49,9 @@ fi:
             name_uniqueness: Rajapintakäyttäjä tällä nimellä on jo olemassa.
       titles:
         api_credentials: Rajapintakäyttäjät
+      shared:
+        api_users:
+          copied: Kopioitu!
     accountability:
       admin:
         timeline_entries:

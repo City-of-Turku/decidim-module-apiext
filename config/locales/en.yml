@@ -52,6 +52,9 @@ en:
             name_uniqueness: An API user with this name already exists.
       titles:
         api_credentials: API credentials
+      shared:
+        api_users:
+          copied: Copied!
     accountability:
       admin:
         timeline_entries:

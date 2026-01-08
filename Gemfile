@@ -20,6 +20,10 @@ gem "decidim-apifiles", github: "mainio/decidim-module-apifiles", branch: "relea
 gem "puma", ">= 5.0.0"
 gem "uglifier", "~> 4.1"
 
+# This is a temporary fix for: https://github.com/rails/rails/issues/54263
+# Without this downgrade Activesupport will give error for missing Logger
+gem "concurrent-ruby", "1.3.4"
+
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
   gem "decidim-dev", DECIDIM_VERSION

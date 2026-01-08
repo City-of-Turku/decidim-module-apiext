@@ -49,6 +49,9 @@ sv:
             name_uniqueness: En API-användare med detta namn finns redan.
       titles:
         api_credentials: API-uppgifter
+      shared:
+        api_users:
+          copied: Kopierade!
     accountability:
       admin:
         timeline_entries:

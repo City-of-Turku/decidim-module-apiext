@@ -24,7 +24,7 @@
         </td>
         <td>
         <% if fresh_token?(api_user) %>
-          <%= link_to t("copy_token", scope: "decidim.apiext.actions"), "#", id: "api-user-token" %>
+          <%= link_to t("copy_token", scope: "decidim.apiext.actions"), "#", id: "api-user-token", data: { action: t(".copied") } %>
             <%= hidden_field_tag :token, params[:token] %>
           <br/>
         <% end %>

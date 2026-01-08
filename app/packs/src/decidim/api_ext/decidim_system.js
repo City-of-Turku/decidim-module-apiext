@@ -16,7 +16,7 @@ $(() => {
   const replaceText = () => {
     let spanElement = document.createElement("span");
     let parentElement = copyToClipboard.parentNode;
-    spanElement.textContent = "Copied!";
+    spanElement.textContent = copyToClipboard.dataset.action;
     parentElement.insertBefore(spanElement, copyToClipboard.nextSibling);
     parentElement.removeChild(copyToClipboard);
     parentElement.removeChild(tokenInput);

@@ -34,6 +34,7 @@ module Decidim
         let(:form) do
           double(
             invalid?: invalid,
+            budget: budget,
             current_user: current_user,
             title: { en: "title" },
             description: { en: "description" },
