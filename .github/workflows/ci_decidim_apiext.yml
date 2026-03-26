@@ -20,4 +20,5 @@ jobs:
     needs: build_app
     name: Tests
     uses: mainio/gha-decidim-module/.github/workflows/ci_rspec.yml@main
-    secrets: inherit
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
