@@ -14,7 +14,7 @@ module Decidim
 
         ransacker :user_searchable do
           Arel.sql(
-            <<~SQL
+            <<~SQL.squish
               (
                 SELECT string_agg(u.name || ' ' || u.nickname || ' ' || u.email, ' ')
                 FROM decidim_users u
