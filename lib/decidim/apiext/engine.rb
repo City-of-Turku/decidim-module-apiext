@@ -42,6 +42,9 @@ module Decidim
           # models
           ::Decidim::ActionLog.include(ActionLogExtensions)
 
+          # presenters
+          ::Decidim::Log::UserPresenter.include(UserPresenterExtensions)
+
           # services
           ::Decidim::Traceability.include(TraceabilityExtensions)
           ::Decidim::ActionLogger.include(ActionLoggerExtensions)
