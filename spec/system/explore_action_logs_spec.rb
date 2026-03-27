@@ -34,9 +34,11 @@ describe "ActionLogs" do
   context "when user private" do
     before do
       create_action_logs
+      allow(Decidim).to receive(:module_installed?) do |module_name|
+        module_name == :privacy
+      end
 
       switch_to_host(organization.host)
-      allow(Decidim).to receive(:module_installed?).and_return(true)
       # rubocop:disable RSpec/AnyInstance
       allow_any_instance_of(Decidim::User).to receive(:public?).and_return(false)
       # rubocop:enable RSpec/AnyInstance
@@ -58,9 +60,11 @@ describe "ActionLogs" do
   context "when user anonymous" do
     before do
       create_action_logs
+      allow(Decidim).to receive(:module_installed?) do |module_name|
+        module_name == :privacy
+      end
 
       switch_to_host(organization.host)
-      allow(Decidim).to receive(:module_installed?).and_return(true)
       # rubocop:disable RSpec/AnyInstance
       allow_any_instance_of(Decidim::User).to receive(:public?).and_return(true)
       allow_any_instance_of(Decidim::User).to receive(:anonymous?).and_return(true)
