@@ -15,9 +15,14 @@ DECIDIM_VERSION = Decidim::Apiext.decidim_version
 gem "decidim", DECIDIM_VERSION
 gem "decidim-apiext", path: "."
 
-gem "decidim-apifiles", github: "mainio/decidim-module-apifiles", branch: "main"
+gem "decidim-apifiles", github: "mainio/decidim-module-apifiles", branch: "release/0.28-stable"
 
 gem "bootsnap", "~> 1.4"
+
+# This is a temporary fix for: https://github.com/rails/rails/issues/54263
+# Without this downgrade Activesupport will give error for missing Logger
+gem "concurrent-ruby", "1.3.4"
+
 gem "puma", ">= 6.6.1"
 
 # This locks nokogiri to a version < 1.17 so it doesn't cause issues
