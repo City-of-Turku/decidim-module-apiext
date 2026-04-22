@@ -50,7 +50,7 @@ module Decidim
         let(:query) { "{ avatarUrl }" }
 
         it "returns the default avatar url (small version)" do
-          expect(response["avatarUrl"]).to end_with("#{::Webpacker.instance.manifest.lookup("media/images/default-avatar.svg")}")
+          expect(response["avatarUrl"]).to end_with(::Webpacker.instance.manifest.lookup("media/images/default-avatar.svg"))
         end
       end
 
