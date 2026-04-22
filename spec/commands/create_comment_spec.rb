@@ -32,7 +32,7 @@ module Decidim
           let!(:second_comment) { create(:comment, commentable: first_comment) }
           let!(:third_comment) { create(:comment, commentable: second_comment) }
           let!(:commentable) { create(:comment, commentable: third_comment) }
-          let(:command) { described_class.new(form, author) }
+          let(:command) { described_class.new(form) }
 
           it "broadcasts invalid" do
             expect { command.call }.to broadcast(:invalid)

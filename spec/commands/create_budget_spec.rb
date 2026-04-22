@@ -23,7 +23,7 @@ module Decidim
             total_budget: 100_000_000,
             scope:,
             current_user: user,
-            current_component:,
+            component: current_component,
             current_organization: organization
           )
         end

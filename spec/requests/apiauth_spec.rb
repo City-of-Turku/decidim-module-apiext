@@ -31,6 +31,10 @@ RSpec.describe "APIAuthentication" do
 
   before do
     host! organization.host
+    allow(Rails.application.secrets).to receive(:secret_key_jwt).and_return("test_jwt_secret_that_is_long_enough_32chars")
+    Warden::JWTAuth.config.secret = "test_jwt_secret_that_is_long_enough_32chars"
+    Warden::JWTAuth.config.dispatch_requests = [["POST", %r{^/sign_in$}]]
+    Warden::JWTAuth.config.revocation_requests = [["DELETE", %r{^/sign_out$}]]
   end
 
   it "signs in" do
