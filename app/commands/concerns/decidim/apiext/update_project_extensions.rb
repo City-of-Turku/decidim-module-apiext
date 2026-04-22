@@ -6,28 +6,7 @@ module Decidim
       extend ActiveSupport::Concern
 
       included do
-        private
-
-        def update_project
-          attributes = {
-            budget: form.budget,
-            scope: form.scope,
-            category: form.category,
-            title: form.title,
-            description: form.description,
-            budget_amount: form.budget_amount,
-            selected_at:,
-            address: form.address,
-            latitude: form.latitude,
-            longitude: form.longitude
-          }
-
-          Decidim.traceability.update!(
-            project,
-            form.current_user,
-            **attributes
-          )
-        end
+        fetch_form_attributes :budget, :scope, :category, :title, :description, :budget_amount, :address, :latitude, :longitude
       end
     end
   end
