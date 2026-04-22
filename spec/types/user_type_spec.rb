@@ -65,7 +65,7 @@ module Decidim
           let(:model) { create(:user, :confirmed, :deleted) }
 
           it "returns nothing" do
-            expect(response).to be_nil
+            expect(response["profilePath"]).to be_blank
           end
         end
       end
@@ -79,10 +79,10 @@ module Decidim
       end
 
       describe "organizationName" do
-        let(:query) { "{ organizationName }" }
+        let(:query) { "{ organizationName { translation(locale: \"en\") } }" }
 
         it "returns the user's organization name" do
-          expect(response).to include("organizationName" => model.organization.name)
+          expect(response["organizationName"]["translation"]).to include(model.organization.name["en"])
         end
       end
 

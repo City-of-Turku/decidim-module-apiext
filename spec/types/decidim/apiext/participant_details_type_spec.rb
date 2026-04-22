@@ -50,7 +50,7 @@ module Decidim
                   {
                     avatarUrl
                     profilePath
-                    organizationName
+                    organizationName { translation(locale: "en") }
                   }
                 )
               end
@@ -58,7 +58,7 @@ module Decidim
               it "returns the user public details" do
                 expect(response["profilePath"]).to eq(model.presenter.profile_path)
                 expect(response["avatarUrl"]).to eq(model.presenter.avatar_url(:thumb))
-                expect(response["organizationName"]).to eq(model.organization.name)
+                expect(response["organizationName"]["translation"]).to eq(model.organization.name["en"])
               end
             end
           end
