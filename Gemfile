@@ -15,14 +15,11 @@ DECIDIM_VERSION = Decidim::Apiext.decidim_version
 gem "decidim", DECIDIM_VERSION
 gem "decidim-apiext", path: "."
 
-gem "decidim-apifiles", github: "mainio/decidim-module-apifiles", branch: "release/0.28-stable"
+gem "decidim-apifiles", github: "mainio/decidim-module-apifiles"
 
 gem "bootsnap", "~> 1.4"
 
 gem "puma", ">= 6.6.1"
-
-# This locks nokogiri to a version < 1.17 so it doesn't cause issues
-gem "nokogiri", "1.16.8"
 
 group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
@@ -30,14 +27,6 @@ group :development, :test do
   gem "decidim-dev", DECIDIM_VERSION
 
   gem "faker", "~> 3.5"
-
-  # rubocop & rubocop-rspec are set to the following versions because of a
-  # change where FactoryBot/CreateList must be a boolean instead of contextual.
-  # These version locks can be removed when this problem is handled through
-  # decidim-dev.
-  gem "rubocop", "~> 1.28"
-  gem "rubocop-faker"
-  gem "rubocop-rspec", "2.20"
 
   # Fix issue with simplecov-cobertura
   # See: https://github.com/jessebs/simplecov-cobertura/pull/44
