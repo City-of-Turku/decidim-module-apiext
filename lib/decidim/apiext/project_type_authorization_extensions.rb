@@ -5,6 +5,7 @@ module Decidim
     module ProjectTypeAuthorizationExtensions
       def authorized?(object, context)
         return false unless object.component.published? || context[:current_user]&.admin?
+
         super
       end
     end

@@ -20,7 +20,7 @@ module Decidim
       private
 
       def public_read_result_action?
-        return unless permission_action.action == :read && permission_action.subject == :result
+        return false unless permission_action.action == :read && permission_action.subject == :result
 
         if result
           allow!

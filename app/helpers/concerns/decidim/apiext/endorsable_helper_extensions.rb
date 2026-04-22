@@ -8,7 +8,7 @@ module Decidim
       included do
         def fully_endorsed?(resource, user)
           return false unless user
-          return if user.is_a?(Decidim::Apiext::ApiUser)
+          return false if user.is_a?(Decidim::Apiext::ApiUser)
 
           user_group_endorsements = Decidim::UserGroups::ManageableUserGroups.for(user).verified.all? { |user_group| resource.endorsed_by?(user, user_group) }
 

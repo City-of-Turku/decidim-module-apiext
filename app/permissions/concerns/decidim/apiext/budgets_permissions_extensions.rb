@@ -20,7 +20,7 @@ module Decidim
       private
 
       def public_action_allowed?
-        return unless permission_action.subject == :project && permission_action.action == :read
+        return false unless permission_action.subject == :project && permission_action.action == :read
 
         if project
           allow!
