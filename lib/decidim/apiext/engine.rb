@@ -50,6 +50,8 @@ module Decidim
           ::Decidim::ActionLogger.include(ActionLoggerExtensions)
 
           ::Decidim::Core::AuthorInterface.include(AuthorInterfaceExtensions)
+          ::Decidim::Comments::CommentableInterface.include(CommentableInterfaceExtensions)
+          ::Decidim::Budgets::ProjectType.singleton_class.prepend(ProjectTypeAuthorizationExtensions)
           ::Decidim::Budgets::BudgetType.include(
             ::Decidim::Apiext::BudgetTypeExtensions
           )
