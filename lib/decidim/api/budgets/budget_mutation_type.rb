@@ -41,7 +41,7 @@ module Decidim
           form = project_form_from(attributes)
 
           ::Decidim::Budgets::Admin::CreateProject.call(form) do
-            on(:ok) do
+            on(:ok) do |project|
               # The command does not broadcast the project so we need to fetch it
               # from a private method within the command itself.
               return project
@@ -66,9 +66,10 @@ module Decidim
 
           form = project_form_from(attributes)
           ::Decidim::Budgets::Admin::UpdateProject.call(form, project) do
-            on(:ok) do
-              return project
+            on(:ok) do |updated_project|
+              return updated_project
             end
+
             on(:invalid) do
               return GraphQL::ExecutionError.new(
                 form.errors.full_messages.join(", ")
@@ -87,9 +88,9 @@ module Decidim
 
           enforce_permission_to(:destroy, :project, project:)
 
-          ::Decidim::Budgets::Admin::DestroyProject.call(project, current_user) do
-            on(:ok) do
-              return project
+          ::Decidim::Commands::DestroyResource.call(project, current_user) do
+            on(:ok) do |deleted_project|
+              return deleted_project
             end
           end
 

@@ -108,7 +108,7 @@ A typical mutation would be like:
           )
 
           ::Decidim::Budgets::Admin::CreateBudget.call(form) do
-            on(:ok, budget) do
+            on(:ok) do |budget|
               return budget
             end
 
@@ -139,7 +139,7 @@ A typical mutation would be like:
             current_user:
           )
           ::Decidim::Budgets::Admin::UpdateBudget.call(form, @budget) do
-            on(:ok, budget) do
+            on(:ok) do |budget|
               return budget
             end
 
@@ -158,7 +158,7 @@ A typical mutation would be like:
         def delete_budget(id:)
           enforce_permission_to :update, :budget, budget: budget(id:)
           ::Decidim::Budgets::Admin::DestroyBudget.call(@budget, current_user) do
-            on(:ok, budget) do
+            on(:ok) do |budget|
               return budget
             end
 

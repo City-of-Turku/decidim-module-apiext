@@ -30,7 +30,7 @@ module Decidim
 
           form = accountability_from_params(attributes)
           Decidim::Accountability::Admin::CreateResult.call(form) do
-            on(:ok) do
+            on(:ok) do |result|
               return result
             end
 
@@ -51,7 +51,7 @@ module Decidim
 
           form = accountability_from_params(attributes)
           Decidim::Accountability::Admin::UpdateResult.call(form, @result) do
-            on(:ok) do
+            on(:ok) do |result|
               return result
             end
             on(:invalid) do
@@ -69,8 +69,8 @@ module Decidim
         def delete_result(id:)
           enforce_permission_to :destroy, :result, result: result(id:)
 
-          Decidim::Accountability::Admin::DestroyResult.call(@result, current_user) do
-            on(:ok, result) do
+          Decidim::Commands::DestroyResource.call(@result, current_user) do
+            on(:ok) do |result|
               return result
             end
           end
