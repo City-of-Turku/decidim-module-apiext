@@ -29,13 +29,12 @@ module Decidim
       end
 
       module ClassMethods
-        # There are some cases that the admin ([or] API) user needs to 
+        # There are some cases that the admin ([or] API) user needs to
         # be able to create a project while it is not published yet. This
         # overrides the authorization logic.
         def authorized?(object, context)
-
           return true if context[:current_user]&.admin?
-          
+
           super
         end
       end
