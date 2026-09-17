@@ -34,6 +34,9 @@ module Decidim
         let(:progress) { rand(100) }
         let(:external_id) { "dummy_id" }
         let(:parent_id) { nil }
+        let(:taxonomies) do
+          create_list(:taxonomy, 2, :with_parent, organization: current_organization)
+        end
 
         let(:attributes) do
           {
@@ -44,7 +47,7 @@ module Decidim
             progress:,
             externalId: external_id,
             statusId: status.id,
-            scopeId: scope.id,
+            taxonomyIds: taxonomies.map(&:id),
             parentId: parent_id,
             projectIds: projects.map(&:id),
             proposalIds: proposals.map(&:id)
@@ -83,18 +86,18 @@ module Decidim
           end
         end
 
-        describe "destroy" do
+        describe "soft delete" do
           let!(:result) { create(:result, component:) }
-          let(:query) { "{ deleteResult(id: #{result.id}) { id } }" }
+          let(:query) { "{ softDeleteResult(id: #{result.id}) { id } }" }
 
           it_behaves_like "when the user does not have permissions"
 
-          it_behaves_like "destroy result mutation examples"
+          it_behaves_like "soft delete result mutation examples"
 
           context "with api user" do
             let!(:current_user) { create(:api_user, organization: current_organization) }
 
-            it_behaves_like "destroy result mutation examples"
+            it_behaves_like "soft delete result mutation examples"
           end
         end
       end

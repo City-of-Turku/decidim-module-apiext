@@ -30,6 +30,8 @@ en:
         refresh_secret: Refresh secret
         new: New API user
         create: Create
+        soft_delete:
+          error: Something went wrong, please try again later.
       api_user:
         refresh:
           success: Token refreshed successfully.

@@ -13,8 +13,7 @@ shared_examples "update project mutation examples" do
     expect(project.address).to eq(attributes[:location][:address])
     expect(project.latitude).to eq(attributes[:location][:latitude])
     expect(project.longitude).to eq(attributes[:location][:longitude])
-    expect(project.category.id).to eq(category.id)
-    expect(project.scope.id).to eq(scope.id)
+    expect(project.taxonomies).to match_array(taxonomies)
     expect(project.linked_resources(:proposals, "included_proposals").map(&:id)).to match_array(proposals.map(&:id))
   end
 end
@@ -32,8 +31,7 @@ shared_examples "create project mutation examples" do
     expect(project.address).to eq(attributes[:location][:address])
     expect(project.latitude).to eq(attributes[:location][:latitude])
     expect(project.longitude).to eq(attributes[:location][:longitude])
-    expect(project.category.id).to eq(category.id)
-    expect(project.scope.id).to eq(scope.id)
+    expect(project.taxonomies).to match_array(taxonomies)
     expect(project.linked_resources(:proposals, "included_proposals").map(&:id)).to match_array(proposals.map(&:id))
   end
 end

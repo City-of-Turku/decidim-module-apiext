@@ -11,8 +11,9 @@ module Decidim
         let(:budget) { create(:budget) }
         let(:project) { create(:project, budget:) }
         let(:organization) { budget.component.organization }
-        let(:scope) { create(:scope, organization:) }
-        let(:category) { create(:category, participatory_space: budget.component.participatory_space) }
+        let(:taxonomizations) do
+          2.times.map { build(:taxonomization, taxonomy: create(:taxonomy, :with_parent, organization:), taxonomizable: nil) }
+        end
         let(:participatory_process) { budget.component.participatory_space }
         let(:current_user) { create(:api_user, organization:) }
         let(:uploaded_photos) { [] }
@@ -40,8 +41,7 @@ module Decidim
             budget:,
             budget_amount: 10_000_000,
             proposal_ids: proposals.map(&:id),
-            scope:,
-            category:,
+            taxonomizations:,
             selected:,
             photos: current_photos,
             add_photos: uploaded_photos,
@@ -66,14 +66,9 @@ module Decidim
             expect(translated(project.title)).to eq "title"
           end
 
-          it "sets the scope" do
+          it "sets the taxonomies" do
             subject.call
-            expect(project.scope).to eq scope
-          end
-
-          it "sets the category" do
-            subject.call
-            expect(project.category).to eq category
+            expect(project.reload.taxonomies).to match_array(taxonomizations.map(&:taxonomy))
           end
 
           it "traces the action", versioning: true do
@@ -82,7 +77,7 @@ module Decidim
               .with(
                 project,
                 current_user,
-                hash_including(:scope, :category, :title, :description, :budget_amount)
+                hash_including(:taxonomizations, :title, :description, :budget_amount)
               )
               .and_call_original
 

@@ -26,8 +26,7 @@ A typical mutation would be like:
           attributes:{
             title: {fi: 'Your title'},
             description: {fi: 'Your description' },
-            wight: 10,
-            scope_id: 2,
+            wight: 10
             total_budget: 12345
           }
         ){
@@ -68,7 +67,7 @@ A typical mutation would be like:
           argument :id, GraphQL::Types::ID, "The ID of the budget", required: true
         end
 
-        field :delete_budget, type: ::Decidim::Budgets::BudgetType, description: "Mutates a budget", null: true do
+        field :soft_delete_budget, type: ::Decidim::Budgets::BudgetType, description: "Mutates a budget", null: true do
           description "Delete budget
 
 A typical mutation would be like:
@@ -77,7 +76,7 @@ A typical mutation would be like:
   mutation{
     component(id: 123) {
       ... on BudgetsMutation {
-        deleteBudget(id: 234){
+        softDeleteBudget(id: 234){
           id
         }
       }
@@ -99,8 +98,7 @@ A typical mutation would be like:
             weight: attributes.weight,
             title: json_value(attributes.title),
             description: json_value(attributes.description),
-            total_budget: attributes.total_budget.to_i,
-            decidim_scope_id: attributes.scope_id.to_i
+            total_budget: attributes.total_budget.to_i
           ).with_context(
             current_component: object,
             current_organization: object.organization,
@@ -131,8 +129,7 @@ A typical mutation would be like:
             weight: attributes.weight,
             title: json_value(attributes.title),
             description: json_value(attributes.description),
-            total_budget: attributes.total_budget.to_i,
-            decidim_scope_id: attributes.scope_id
+            total_budget: attributes.total_budget.to_i
           ).with_context(
             current_component: object,
             current_organization: object.organization,
@@ -155,22 +152,19 @@ A typical mutation would be like:
           end
         end
 
-        def delete_budget(id:)
-          enforce_permission_to :update, :budget, budget: budget(id:)
-          ::Decidim::Budgets::Admin::DestroyBudget.call(@budget, current_user) do
+        def soft_delete_budget(id:)
+          enforce_permission_to(:soft_delete, :budget, trashable_deleted_resource: budget(id:))
+
+          ::Decidim::Commands::SoftDeleteResource.call(@budget, current_user) do
             on(:ok) do |budget|
               return budget
             end
 
             on(:invalid) do
               return GraphQL::ExecutionError.new(
-                form.errors.full_messages.join(", ")
+                I18n.t("decidim.apiext.actions.soft_delete.error")
               )
             end
-
-            GraphQL::ExecutionError.new(
-              I18n.t("decidim.budgets.admin.budgets.destroy.invalid")
-            )
           end
         end
       end

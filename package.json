@@ -9,14 +9,14 @@
     "stylelint": "stylelint app/packs/**/*.scss"
   },
   "dependencies": {
-    "@decidim/browserslist-config": "^0.28.6",
-    "@decidim/webpacker": "^0.28.6"
+    "@decidim/browserslist-config": "^0.30.9",
+    "@decidim/webpacker": "^0.30.9"
   },
   "devDependencies": {
-    "@decidim/dev": "^0.28.6",
-    "@decidim/eslint-config": "^0.28.6",
-    "@decidim/prettier-config": "^0.28.6",
-    "@decidim/stylelint-config": "^0.28.6"
+    "@decidim/dev": "^0.30.9",
+    "@decidim/eslint-config": "^0.30.9",
+    "@decidim/prettier-config": "^0.30.9",
+    "@decidim/stylelint-config": "^0.30.9"
   },
   "browserslist": [
     "extends @decidim/browserslist-config"

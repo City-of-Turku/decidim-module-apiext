@@ -86,6 +86,10 @@ module Decidim
       def needs_password_update?
         false
       end
+
+      def ephemeral?
+        false
+      end
     end
   end
 end

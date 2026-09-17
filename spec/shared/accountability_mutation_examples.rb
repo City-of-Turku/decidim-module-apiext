@@ -38,7 +38,8 @@ shared_examples "create result mutation examples" do
     expect(result.start_date).to eq(Date.parse(start_date))
     expect(result.end_date).to eq(Date.parse(end_date))
     expect(result.progress).to eq(progress)
-    expect(result.decidim_scope_id).to eq(scope.id)
+    result_taxonomies = result.taxonomies.map(&:id)
+    expect(result_taxonomies).to match(taxonomies.map(&:id))
     expect(result.status).to eq(status)
     expect(result.parent_id).to eq(parent_id)
     expect(result.linked_resources(:proposals, "included_proposals")).to match_array(proposals)
@@ -58,7 +59,8 @@ shared_examples "update result mutation examples" do
     expect(result.start_date).to eq(Date.parse(start_date))
     expect(result.end_date).to eq(Date.parse(end_date))
     expect(result.progress).to eq(progress)
-    expect(result.decidim_scope_id).to eq(scope.id)
+    result_taxonomies = result.taxonomies.map(&:id)
+    expect(result_taxonomies).to match(taxonomies.map(&:id))
     expect(result.status).to eq(status)
     expect(result.parent_id).to eq(parent_id)
     expect(result.linked_resources(:proposals, "included_proposals")).to match_array(proposals)
@@ -66,10 +68,10 @@ shared_examples "update result mutation examples" do
   end
 end
 
-shared_examples "destroy result mutation examples" do
-  it "destroys the timeline entry" do
+shared_examples "soft delete result mutation examples" do
+  it "soft deletes the result" do
     expect { response }.to change(Decidim::Accountability::Result, :count).by(-1)
 
-    expect(response["deleteResult"]["id"]).to match(result.id.to_s)
+    expect(response["softDeleteResult"]["id"]).to match(result.id.to_s)
   end
 end

@@ -4,7 +4,7 @@ require "spec_helper"
 
 module Decidim
   module Commands
-    describe DestroyResource do
+    describe SoftDeleteResource do
       context "when resource is project" do
         subject { described_class.new(project, user) }
 
@@ -15,16 +15,21 @@ module Decidim
         let(:user) { create(:api_user, organization:) }
 
         context "when everything is ok" do
-          it "destroys the project" do
+          it "soft-deletes the project" do
+            expect { subject.call }.to change { project.reload.deleted_at }.from(nil)
+          end
+
+          it "hides it from the default scope but keeps the row" do
             subject.call
-            expect { project.reload }.to raise_error(ActiveRecord::RecordNotFound)
+            expect(Decidim::Budgets::Project.where(id: project.id).count).to eq(0)
+            expect(Decidim::Budgets::Project.with_deleted.where(id: project.id).count).to eq(1)
           end
 
           it "traces the action", versioning: true do
             expect(Decidim.traceability)
               .to receive(:perform_action!)
               .with(
-                :delete,
+                "soft_delete",
                 project,
                 user
               )
@@ -41,21 +46,26 @@ module Decidim
         subject { described_class.new(result, user) }
 
         let(:organization) { create(:organization) }
-        let(:component) { create(:budgets_component, organization:) }
-        let(:result) { create(:result) }
+        let(:component) { create(:accountability_component, organization:) }
+        let(:result) { create(:result, component:) }
         let(:user) { create(:api_user, organization:) }
 
         context "when everything is ok" do
-          it "destroys the project" do
+          it "soft-deletes the result" do
+            expect { subject.call }.to change { result.reload.deleted_at }.from(nil)
+          end
+
+          it "hides it from the default scope but keeps the row" do
             subject.call
-            expect { result.reload }.to raise_error(ActiveRecord::RecordNotFound)
+            expect(Decidim::Accountability::Result.where(id: result.id).count).to eq(0)
+            expect(Decidim::Accountability::Result.with_deleted.where(id: result.id).count).to eq(1)
           end
 
           it "traces the action", versioning: true do
             expect(Decidim.traceability)
               .to receive(:perform_action!)
               .with(
-                :delete,
+                "soft_delete",
                 result,
                 user
               )

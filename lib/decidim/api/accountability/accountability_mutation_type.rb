@@ -17,7 +17,7 @@ module Decidim
           argument :attributes, ResultAttributes, description: "input attributes to update a result", required: true
         end
 
-        field :delete_result, Decidim::Accountability::ResultType, null: false do
+        field :soft_delete_result, Decidim::Accountability::ResultType, null: false do
           argument :id, GraphQL::Types::ID, required: true
         end
 
@@ -66,12 +66,18 @@ module Decidim
           )
         end
 
-        def delete_result(id:)
-          enforce_permission_to :destroy, :result, result: result(id:)
+        def soft_delete_result(id:)
+          enforce_permission_to(:soft_delete, :result, trashable_deleted_resource: result(id:))
 
-          Decidim::Commands::DestroyResource.call(@result, current_user) do
+          ::Decidim::Commands::SoftDeleteResource.call(@result, current_user) do
             on(:ok) do |result|
               return result
+            end
+
+            on(:invalid) do
+              return GraphQL::ExecutionError.new(
+                I18n.t("decidim.apiext.actions.soft_delete.error")
+              )
             end
           end
         end
@@ -92,8 +98,7 @@ module Decidim
             decidim_accountability_status_id: attributes.status_id,
             weight: attributes.weight,
             parent_id: attributes.parent_id,
-            decidim_scope_id: attributes.scope_id,
-            decidim_category_id: attributes.category_id,
+            taxonomies: attributes.taxonomy_ids || [],
             project_ids: attributes.project_ids || current_linked_resources(@result, :projects),
             proposal_ids: attributes.proposal_ids || current_linked_resources(@result, :proposals)
           }
@@ -116,10 +121,6 @@ module Decidim
 
         def current_organization
           context[:current_organization]
-        end
-
-        def scope(id)
-          object.scopes.order(:id).find(id)
         end
 
         def current_linked_resources(result, type)

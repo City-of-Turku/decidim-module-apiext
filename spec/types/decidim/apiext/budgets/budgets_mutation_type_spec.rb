@@ -23,7 +23,6 @@ module Decidim
               title: { en: "New budget" },
               description: { en: "<p>Budget description</p>" },
               totalBudget: 50_000,
-              scopeId: scope.id,
               weight: 0
             }
           end
@@ -57,7 +56,6 @@ module Decidim
               title: { en: "Updated budget" },
               description: { en: "<p>Updated budget description</p>" },
               totalBudget: 50_000,
-              scopeId: scope.id,
               weight: 0
             }
           end
@@ -85,7 +83,7 @@ module Decidim
 
         describe "deleteBudget" do
           let!(:budget) { create(:budget, component: model) }
-          let(:query) { "{ deleteBudget(id: #{budget.id}) { id } }" }
+          let(:query) { "{ softDeleteBudget(id: #{budget.id}) { id } }" }
 
           context "with no user" do
             let!(:current_user) { nil }
@@ -111,7 +109,7 @@ module Decidim
             it "deletes the budget" do
               expect { response }.to change(Decidim::Budgets::Budget, :count).by(-1)
 
-              expect(response["deleteBudget"]).to eq("id" => budget.id.to_s)
+              expect(response["softDeleteBudget"]).to eq("id" => budget.id.to_s)
             end
           end
 
@@ -121,7 +119,7 @@ module Decidim
             it "deletes the budget" do
               expect { response }.to change(Decidim::Budgets::Budget, :count).by(-1)
 
-              expect(response["deleteBudget"]).to eq("id" => budget.id.to_s)
+              expect(response["softDeleteBudget"]).to eq("id" => budget.id.to_s)
             end
           end
         end

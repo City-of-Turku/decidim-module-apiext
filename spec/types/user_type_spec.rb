@@ -65,7 +65,7 @@ module Decidim
           let(:model) { create(:user, :confirmed, :deleted) }
 
           it "returns nothing" do
-            expect(response["profilePath"]).to be_blank
+            expect(response).to be_nil
           end
         end
       end

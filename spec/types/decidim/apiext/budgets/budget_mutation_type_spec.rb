@@ -14,8 +14,9 @@ module Decidim
         let(:participatory_space) { create(:participatory_process, organization: current_organization) }
         let(:component) { create(:budgets_component, participatory_space:) }
 
-        let(:category) { create(:category, participatory_space:) }
-        let(:scope) { create(:scope, organization: current_organization) }
+        let(:taxonomies) do
+          create_list(:taxonomy, 2, :with_parent, organization: current_organization)
+        end
 
         let(:proposals) { create_list(:proposal, 3, component: proposals_component) }
         let(:proposals_component) { create(:proposal_component, participatory_space:) }
@@ -32,8 +33,7 @@ module Decidim
                 latitude: 60.149792,
                 longitude: 24.887430
               },
-              categoryId: category.id,
-              scopeId: scope.id,
+              taxonomyIds: taxonomies.map(&:id),
               proposalIds: proposals.map(&:id)
             }
           end
@@ -72,8 +72,7 @@ module Decidim
                 latitude: 60.149792,
                 longitude: 24.887430
               },
-              categoryId: category.id,
-              scopeId: scope.id,
+              taxonomyIds: taxonomies.map(&:id),
               proposalIds: proposals.map(&:id)
             }
           end
@@ -101,7 +100,7 @@ module Decidim
 
         describe "deleteProject" do
           let!(:project) { create(:project, budget: model) }
-          let(:query) { "{ deleteProject(id: #{project.id}) { id } }" }
+          let(:query) { "{ softDeleteProject(id: #{project.id}) { id } }" }
 
           context "with no user" do
             let!(:current_user) { nil }
@@ -127,7 +126,7 @@ module Decidim
             it "deletes the project" do
               expect { response }.to change(Decidim::Budgets::Project, :count).by(-1)
 
-              expect(response["deleteProject"]).to eq("id" => project.id.to_s)
+              expect(response["softDeleteProject"]).to eq("id" => project.id.to_s)
             end
           end
 
@@ -137,7 +136,7 @@ module Decidim
             it "deletes the project" do
               expect { response }.to change(Decidim::Budgets::Project, :count).by(-1)
 
-              expect(response["deleteProject"]).to eq("id" => project.id.to_s)
+              expect(response["softDeleteProject"]).to eq("id" => project.id.to_s)
             end
           end
         end

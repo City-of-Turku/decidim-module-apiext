@@ -29,7 +29,7 @@ module Decidim
           argument :id, GraphQL::Types::ID, required: true
         end
 
-        field :delete_project, ::Decidim::Budgets::ProjectType, null: true do
+        field :soft_delete_project, ::Decidim::Budgets::ProjectType, null: true do
           description "A mutation to delete a project within a budget."
 
           argument :id, GraphQL::Types::ID, required: true
@@ -82,21 +82,23 @@ module Decidim
           )
         end
 
-        def delete_project(id:)
+        def soft_delete_project(id:)
           project = object.projects.find_by(id:)
           return unless project
 
-          enforce_permission_to(:destroy, :project, project:)
+          enforce_permission_to(:soft_delete, :project, trashable_deleted_resource: project)
 
-          ::Decidim::Commands::DestroyResource.call(project, current_user) do
-            on(:ok) do |deleted_project|
-              return deleted_project
+          ::Decidim::Commands::SoftDeleteResource.call(project, current_user) do
+            on(:ok) do |project|
+              return project
+            end
+
+            on(:invalid) do
+              return GraphQL::ExecutionError.new(
+                I18n.t("decidim.apiext.actions.soft_delete.error")
+              )
             end
           end
-
-          GraphQL::ExecutionError.new(
-            I18n.t("decidim.budgets.admin.projects.destroy.invalid")
-          )
         end
 
         def project(id:)
@@ -129,8 +131,7 @@ module Decidim
             "address" => attributes&.location&.address,
             "latitude" => attributes&.location&.latitude,
             "longitude" => attributes&.location&.longitude,
-            "decidim_category_id" => attributes.category_id,
-            "decidim_scope_id" => attributes.scope_id,
+            "taxonomies" => attributes.taxonomy_ids || [],
             "proposal_ids" => attributes.proposal_ids || related_ids_for(project, :proposals),
             "idea_ids" => attributes.idea_ids || related_ids_for(project, :ideas),
             "plan_ids" => attributes.plan_ids || related_ids_for(project, :plans)

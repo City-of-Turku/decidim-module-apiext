@@ -42,7 +42,6 @@ module Decidim
           expect(translated(budget.description)).to eq "description"
           expect(budget.weight).to eq 0
           expect(budget.total_budget).to eq 100_000_000
-          expect(budget.scope).to eq scope
         end
 
         it "sets the component" do

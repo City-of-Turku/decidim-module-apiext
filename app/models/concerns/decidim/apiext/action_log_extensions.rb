@@ -24,6 +24,16 @@ module Decidim
             SQL
           )
         end
+
+        def self.ransackable_attributes(auth_object = nil)
+          return [] unless auth_object&.admin?
+
+          %w(created_at user_searchable)
+        end
+
+        def self.ransackable_associations(_auth_object = nil)
+          []
+        end
       end
     end
   end

@@ -11,11 +11,12 @@ base_path = "../" if File.basename(__dir__) == "development_app"
 require_relative "#{base_path}lib/decidim/apiext/version"
 
 DECIDIM_VERSION = Decidim::Apiext.decidim_version
+DECIDIM_BRANCH = "release/0.30-stable"
 
 gem "decidim", DECIDIM_VERSION
 gem "decidim-apiext", path: "."
 
-gem "decidim-apifiles", github: "mainio/decidim-module-apifiles"
+gem "decidim-apifiles", github: "mainio/decidim-module-apifiles", branch: DECIDIM_BRANCH
 
 gem "bootsnap", "~> 1.4"
 
