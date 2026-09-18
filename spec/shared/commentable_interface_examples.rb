@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-shared_examples_for "commentable interface" do
+shared_examples_for "apiext commentable interface" do
   describe "total_comments_count" do
     let(:query) { "{ totalCommentsCount }" }
 

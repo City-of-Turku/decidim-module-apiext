@@ -11,5 +11,5 @@ describe Decidim::Accountability::ResultType, type: :graphql do
   let(:model) { create(:result) }
   let(:organization) { model.organization }
 
-  include_examples "commentable interface"
+  include_examples "apiext commentable interface"
 end

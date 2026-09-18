@@ -17,7 +17,7 @@ describe Decidim::Budgets::ProjectType, type: :graphql do
   let(:model) { create(:project, budget:) }
   let(:organization) { current_organization }
 
-  include_examples "commentable interface"
+  include_examples "apiext commentable interface"
 
   describe "id" do
     let(:query) { "{ id }" }
