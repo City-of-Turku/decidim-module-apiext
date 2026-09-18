@@ -15,24 +15,24 @@ module Decidim
         field :create_project, ::Decidim::Budgets::ProjectType, null: false do
           description "A mutation to create a project within a budget."
 
-          argument :attributes, ProjectAttributes, required: true
+          argument :attributes, ProjectAttributes, "Project attributes", required: true
         end
 
-        field :update_project, ::Decidim::Budgets::ProjectType, null: true do
+        field :update_project, ::Decidim::Budgets::ProjectType, "Update project", null: true do
           description "A mutation to update a project within a budget."
 
-          argument :id, GraphQL::Types::ID, required: true
-          argument :attributes, ProjectAttributes, required: true
+          argument :attributes, ProjectAttributes, "Project attributes", required: true
+          argument :id, GraphQL::Types::ID, "ID of the project", required: true
         end
 
         field :project, ProjectMutationType, description: "Mutates a project", null: true do
-          argument :id, GraphQL::Types::ID, required: true
+          argument :id, GraphQL::Types::ID, "ID of the project", required: true
         end
 
-        field :soft_delete_project, ::Decidim::Budgets::ProjectType, null: true do
+        field :soft_delete_project, ::Decidim::Budgets::ProjectType, "Soft delete project", null: true do
           description "A mutation to delete a project within a budget."
 
-          argument :id, GraphQL::Types::ID, required: true
+          argument :id, GraphQL::Types::ID, "ID of the project", required: true
         end
 
         def create_project(attributes:)
@@ -89,8 +89,8 @@ module Decidim
           enforce_permission_to(:soft_delete, :project, trashable_deleted_resource: project)
 
           ::Decidim::Commands::SoftDeleteResource.call(project, current_user) do
-            on(:ok) do |project|
-              return project
+            on(:ok) do |result|
+              return result
             end
 
             on(:invalid) do
@@ -122,6 +122,7 @@ module Decidim
           )
         end
 
+        # rubocop:disable Metrics/CyclomaticComplexity
         def project_params(attributes, project = nil)
           {
             "title" => json_value(attributes.title),
@@ -139,6 +140,7 @@ module Decidim
             attrs.merge!(attributes.main_image_attributes) if attributes.main_image_attributes
           end
         end
+        # rubocop:enable Metrics/CyclomaticComplexity
 
         def related_ids_for(project, resource)
           return [] unless project

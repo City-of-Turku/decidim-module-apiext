@@ -7,9 +7,9 @@ module Decidim
         graphql_name "ProjectLocationAttributes"
         description "Attributes for defining a location for a project"
 
-        argument :address, GraphQL::Types::String, required: false
-        argument :latitude, GraphQL::Types::Float, required: false
-        argument :longitude, GraphQL::Types::Float, required: false
+        argument :address, GraphQL::Types::String, "Address of the project", required: false
+        argument :latitude, GraphQL::Types::Float, "Latitude of the project", required: false
+        argument :longitude, GraphQL::Types::Float, "Longitude of the project", required: false
       end
     end
   end

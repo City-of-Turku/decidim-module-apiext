@@ -7,21 +7,20 @@ module Decidim
         include ::Decidim::Apiext::ApiPermissions
         include ::Decidim::Apiext::ApiMutationHelpers
 
-        field :create_result, Decidim::Accountability::ResultType, null: false do
-          description "create result for the currnt accountability component"
+        field :create_result, Decidim::Accountability::ResultType, "create result for the currnt accountability component", null: false do
           argument :attributes, ResultAttributes, description: "input attributes to create a result", required: true
         end
 
-        field :update_result, Decidim::Accountability::ResultType, null: false do
-          argument :id, GraphQL::Types::ID, required: true
+        field :update_result, Decidim::Accountability::ResultType, "Update result", null: false do
           argument :attributes, ResultAttributes, description: "input attributes to update a result", required: true
+          argument :id, GraphQL::Types::ID, "ID of the result", required: true
         end
 
-        field :soft_delete_result, Decidim::Accountability::ResultType, null: false do
-          argument :id, GraphQL::Types::ID, required: true
+        field :soft_delete_result, Decidim::Accountability::ResultType, "Soft delete the result", null: false do
+          argument :id, GraphQL::Types::ID, "ID of the result to be soft deleted", required: true
         end
 
-        field :result, type: ::Decidim::Apiext::Accountability::ResultMutationType, description: "Mutates a result", null: true do
+        field :result, ::Decidim::Apiext::Accountability::ResultMutationType, "Mutates a result", null: true do
           argument :id, GraphQL::Types::ID, "The ID of the result", required: true
         end
 

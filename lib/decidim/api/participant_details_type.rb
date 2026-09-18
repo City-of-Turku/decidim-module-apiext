@@ -7,9 +7,9 @@ module Decidim
 
       description "Details for a participant"
 
-      field :nickname, GraphQL::Types::String, "The user's nickname", null: false
-      field :name, GraphQL::Types::String, "The user's name", null: false
       field :email, GraphQL::Types::String, "The user's email", null: false
+      field :name, GraphQL::Types::String, "The user's name", null: false
+      field :nickname, GraphQL::Types::String, "The user's nickname", null: false
 
       def nickname
         enforce_permission_to :read, :users_statistics, user: current_user

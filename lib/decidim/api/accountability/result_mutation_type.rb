@@ -10,15 +10,15 @@ module Decidim
         graphql_name "ResultMutation"
         description "Result of an Accountability component."
 
-        field :id, Decidim::Accountability::ResultType, null: false
+        field :id, Decidim::Accountability::ResultType, "ID of the result", null: false
 
         field :create_timeline_entry, Decidim::Accountability::TimelineEntryType, description: "create timeline entry", null: false do
           argument :attributes, TimelineEntryAttributes, description: "attributes for creating a timeline", required: true
         end
 
         field :update_timeline_entry, Decidim::Accountability::TimelineEntryType, description: "update timeline entry", null: false do
-          argument :id, GraphQL::Types::ID, "timeline entry's unique ID", required: true
           argument :attributes, TimelineEntryAttributes, description: "attributes for updating a timeline", required: true
+          argument :id, GraphQL::Types::ID, "timeline entry's unique ID", required: true
         end
 
         field :delete_timeline_entry, Decidim::Accountability::TimelineEntryType, description: "delete timeline entry", null: false do
