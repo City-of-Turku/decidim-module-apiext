@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 FactoryBot.modify do
   # Fix comments specs for testing the fix for this bug:
   # https://github.com/decidim/decidim/pull/15170

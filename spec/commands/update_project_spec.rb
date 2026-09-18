@@ -9,7 +9,7 @@ module Decidim
         subject { described_class.new(form, project) }
 
         let(:budget) { create(:budget) }
-        let(:secont_budget) { create(:budget, component: budget.component)}
+        let(:secont_budget) { create(:budget, component: budget.component) }
         let(:project) { create(:project, budget:) }
         let(:organization) { budget.component.organization }
         let(:taxonomizations) do

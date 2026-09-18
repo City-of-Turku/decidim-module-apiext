@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # Decidim v0.31 ships three migration that makes the action log polymorphic.
 #
@@ -22,7 +23,7 @@ namespace :decidim_apiext do
     desc "Rewrite Decidim v0.31 ActionLog polymorphic user migration as no-ops"
     task neutralize_add_user_type_to_action_logs_migration: :environment do
       migrations_to_neutralize = {
-        "AddUserTypeToActionLogs" => "7.0",
+        "AddUserTypeToActionLogs" => "7.0"
       }
 
       migrations_dir = Rails.root.join("db/migrate")
@@ -69,9 +70,11 @@ namespace :decidim_apiext do
 
     desc "Migrate action log user_type from Decidim::Apiext::ApiUser to Decidim::Api::ApiUser"
     task migrate_api_user_action_logs: :environment do
+      # rubocop:disable Rails/SkipsModelValidations
       count = Decidim::ActionLog
-        .where(user_type: "Decidim::Apiext::ApiUser")
-        .update_all(user_type: "Decidim::Api::ApiUser")
+              .where(user_type: "Decidim::Apiext::ApiUser")
+              .update_all(user_type: "Decidim::Api::ApiUser")
+      # rubocop:enable Rails/SkipsModelValidations
 
       puts "Updated #{count} action log entries from Decidim::Apiext::ApiUser to Decidim::Api::ApiUser."
     end
