@@ -28,46 +28,46 @@ module Decidim
         end
 
         describe "create" do
-          let(:query) { "{ createTimelineEntry(attributes: #{attributes_to_graphql(attributes)}) { id } }" }
+          let(:query) { "{ createMilestone(attributes: #{attributes_to_graphql(attributes)}) { id } }" }
 
           it_behaves_like "when the user does not have permissions"
 
-          it_behaves_like "create timeline entry mutation examples"
+          it_behaves_like "create milestonemutation examples"
 
           context "with api user" do
-            it_behaves_like "create timeline entry mutation examples" do
+            it_behaves_like "create milestonemutation examples" do
               let!(:current_user) { create(:api_user, organization: current_organization) }
             end
           end
         end
 
         describe "update" do
-          let!(:entry) { create(:timeline_entry, result: model) }
+          let!(:entry) { create(:milestone, result: model) }
 
-          let(:query) { "{ updateTimelineEntry(id: #{entry.id}, attributes: #{attributes_to_graphql(attributes)}) { id } }" }
+          let(:query) { "{ updateMilestone(id: #{entry.id}, attributes: #{attributes_to_graphql(attributes)}) { id } }" }
 
           it_behaves_like "when the user does not have permissions"
 
-          it_behaves_like "update timeline entry mutation examples"
+          it_behaves_like "update milestonemutation examples"
 
           context "with api user" do
-            it_behaves_like "update timeline entry mutation examples" do
+            it_behaves_like "update milestonemutation examples" do
               let!(:current_user) { create(:api_user, organization: current_organization) }
             end
           end
         end
 
         describe "destroy" do
-          let!(:entry) { create(:timeline_entry, result: model) }
+          let!(:entry) { create(:milestone, result: model) }
 
-          let(:query) { %({ deleteTimelineEntry(id: "#{entry.id}") { id } }) }
+          let(:query) { %({ deleteMilestone(id: "#{entry.id}") { id } }) }
 
           it_behaves_like "when the user does not have permissions"
 
-          it_behaves_like "delete timeline entry mutation examples"
+          it_behaves_like "delete milestonemutation examples"
 
           context "with api user" do
-            it_behaves_like "delete timeline entry mutation examples" do
+            it_behaves_like "delete milestonemutation examples" do
               let!(:current_user) { create(:api_user, organization: current_organization) }
             end
           end

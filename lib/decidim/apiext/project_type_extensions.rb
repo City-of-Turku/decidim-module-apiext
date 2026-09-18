@@ -23,7 +23,7 @@ module Decidim
           description "The attachments of a project"
         end
 
-        type.field :attachment_collection, [::Decidim::Apifiles::AttachmentCollectionType], null: false do
+        type.field :attachment_collection, [::Decidim::Core::AttachmentCollectionType], null: false do
           description "The attachments of a project"
         end
       end

@@ -1,17 +1,13 @@
 # frozen_string_literal: true
 
-require "devise/jwt"
 require_relative "apiext/api"
 require_relative "apiext/version"
 require_relative "apiext/engine"
-require_relative "apiext/devise"
 
 module Decidim
   module Apiext
     autoload :ApiMutationHelpers, "decidim/apiext/api_mutation_helpers"
     autoload :ApiPermissions, "decidim/apiext/api_permissions"
-    autoload :TokenGenerator, "decidim/apiext/token_generator"
-    autoload :MutationExtensions, "decidim/apiext/mutation_extensions"
     autoload :QueryExtensions, "decidim/apiext/query_extensions"
     autoload :AuthorInterfaceExtensions, "decidim/apiext/author_interface_extensions"
     autoload :ProjectTypeExtensions, "decidim/apiext/project_type_extensions"

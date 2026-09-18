@@ -64,39 +64,26 @@ $ bundle exec rails decidim_apifiles:install:migrations
 $ bundle exec rails db:migrate
 ```
 
-Then, configure a secret key by adding the following to your application's
-`config/secrets.yml`:
+Then, configure the JWT secret key by setting the `DECIDIM_API_JWT_SECRET`
+environment variable. If this variable is not set, the module falls back to
+`Devise.secret_key`.
 
-```yaml
-development:
-  <<: *default
-  # ...
-  secret_key_jwt: generate_a_key_here
+For production and staging, set the environment variable in your deployment
+configuration:
 
-test:
-  <<: *default
-  # ...
-  secret_key_jwt: generate_a_key_here
-
-# Do not keep production secrets in the repository,
-# instead read values from the environment.
-production:
-  <<: *default
-  # ...
-  secret_key_jwt: <%= ENV["SECRET_KEY_JWT"] %>
+```bash
+export DECIDIM_API_JWT_SECRET="your_secret_key_here"
 ```
 
-You can generate the key from the console by running:
+You can generate a key by running:
 
 ```bash
 $ bundle exec rails secret
-abcdef123456... <-- (This printed line is the secret)
 ```
 
-This key is used to encrypt and decrypt the API tokens. You will see an
-exception at the application startup in case this is not defined because it is
-essential for the JWT encryption and decryption to work correctly. Otherwise the
-token validation and checking simply would not work correctly.
+This key is used to sign and verify JWT tokens. Setting a dedicated key is
+recommended for production to keep the API token lifecycle independent from
+other Devise secrets.
 
 ## Usage
 
@@ -153,16 +140,9 @@ example queries presented below, go through these steps:
    `Content-Length`
 4. If you are using [Postman](https://www.postman.com/) or other such API
    development tools, create a clean new request
-5. Make sure that secrets (`config/secrets.yml`) are defined as instructed in
-   this documentation (and `SECRET_KEY_JWT` environment variable has been set
-   for production / staging):
-```yaml
-# config/secrets.yml
-production:
-  <<: *default
-  # ...
-  secret_key_jwt: <%= ENV["SECRET_KEY_JWT"] %>
-```
+5. Make sure the `DECIDIM_API_JWT_SECRET` environment variable is set for
+   production / staging. If not set, Decidim core falls back to
+   `Devise.secret_key`.
 
 ## Configuration
 
@@ -177,6 +157,61 @@ Decidim::Apiext.configure do |config|
   config.force_api_authentication = true
 end
 ```
+
+## Upgrading
+
+### Upgrading to v0.31
+
+Decidim v0.31 merged the API user model into core as `Decidim::Api::ApiUser`.
+This means that several features previously provided by this module (the
+`ApiUser` model, the polymorphic action log user type, the Devise error status
+override, and the admin logs filtering) are now handled by Decidim core.
+
+Because both this module and Decidim core ship migrations that make the action
+logs polymorphic, running `rails db:migrate` directly after copying migrations
+would fail due to duplicate schema changes. The upgrade tasks below handle this
+conflict and update existing data to reference the new core class name.
+
+Follow these steps **in order**:
+
+1. Update the gem version in your Gemfile to the v0.31-compatible release and
+   run bundler:
+   ```bash
+   $ bundle update decidim-apiext
+   ```
+
+2. Copy all new migrations from the engines:
+   ```bash
+   $ bin/rails decidim:install:migrations
+   $ bin/rails decidim_apiext:install:migrations
+   ```
+
+3. Neutralize the duplicate action log migration and migrate existing action log
+   entries from `Decidim::Apiext::ApiUser` to `Decidim::Api::ApiUser`:
+   ```bash
+   $ bin/rails decidim_apiext:upgrade:action_logs
+   ```
+   This task does two things:
+   - Rewrites the core's `AddUserTypeToActionLogs` migration as a no-op, since
+     an equivalent migration was already applied by this module in earlier
+     versions.
+   - Updates all `decidim_action_logs` rows where `user_type` is
+     `Decidim::Apiext::ApiUser` to `Decidim::Api::ApiUser`, aligning them with
+     the core's new class name.
+
+4. Run the migrations:
+   ```bash
+   $ bin/rails db:migrate
+   ```
+
+> **Important:** Skipping step 3 will cause the migration to fail because the
+> action log polymorphic user columns already exist. Always run the upgrade
+> task before `db:migrate`.
+
+Additionally, if your instance previously configured `secret_key_jwt` in
+`config/secrets.yml`, you can remove it. JWT secret configuration is now
+handled through the `DECIDIM_API_JWT_SECRET` environment variable by Decidim
+core, falling back to `Devise.secret_key` when not set.
 
 ## Contributing
 

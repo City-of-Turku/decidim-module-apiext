@@ -9,28 +9,6 @@ describe "ActionLogs" do
   let!(:api_user) { create(:api_user, name: "Joe", nickname: "joeapi", email: "joe@example.org", organization:) }
   let!(:proposal) { create(:proposal) }
 
-  context "when user public" do
-    before do
-      create_action_logs
-
-      switch_to_host(organization.host)
-      login_as user, scope: :user
-      visit decidim_admin.root_path
-      click_on "Admin activity log"
-    end
-
-    it "displays logs' author names correctly" do
-      expect(page).to have_content("Admin log")
-
-      within ".logs.table" do
-        expect(page).to have_css("div.logs__log", count: 2)
-
-        expect(page).to have_css("span.logs__log__author", text: api_user.name)
-        expect(page).to have_css("a.logs__log__author", text: user.name)
-      end
-    end
-  end
-
   context "when user private" do
     before do
       create_action_logs
@@ -97,7 +75,7 @@ describe "ActionLogs" do
     context "and there are no matching logs" do
       it "shows the correct message" do
         within ".filters__section" do
-          fill_in(:q_user_searchable_cont, with: "mickey mouse")
+          fill_in(:q_user_name_or_user_nickname_or_user_email_cont, with: "mickey mouse")
           find("*[type=submit]").click
         end
 
@@ -108,7 +86,7 @@ describe "ActionLogs" do
     context "and searching api user with nickname" do
       it "shows the correct action log" do
         within ".filters__section" do
-          fill_in(:q_user_searchable_cont, with: "joeapi")
+          fill_in(:q_user_name_or_user_nickname_or_user_email_cont, with: "joeapi")
           find("*[type=submit]").click
         end
 
@@ -124,7 +102,7 @@ describe "ActionLogs" do
     context "and searching user with name" do
       it "shows the correct action log" do
         within ".filters__section" do
-          fill_in(:q_user_searchable_cont, with: "Mike")
+          fill_in(:q_user_name_or_user_nickname_or_user_email_cont, with: "Mike")
           find("*[type=submit]").click
         end
 
@@ -140,7 +118,7 @@ describe "ActionLogs" do
     context "and searching user with email" do
       it "shows the correct action log" do
         within ".filters__section" do
-          fill_in(:q_user_searchable_cont, with: "mike@example.org")
+          fill_in(:q_user_name_or_user_nickname_or_user_email_cont, with: "mike@example.org")
           find("*[type=submit]").click
         end
 
@@ -189,6 +167,6 @@ def create_action_logs
         component: {},
         participatory_space: {} },
     visibility: "admin-only",
-    user_type: "Decidim::Apiext::ApiUser"
+    user_type: "Decidim::Api::ApiUser"
   )
 end

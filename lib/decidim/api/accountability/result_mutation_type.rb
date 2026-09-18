@@ -12,23 +12,23 @@ module Decidim
 
         field :id, Decidim::Accountability::ResultType, "ID of the result", null: false
 
-        field :create_timeline_entry, Decidim::Accountability::TimelineEntryType, description: "create timeline entry", null: false do
-          argument :attributes, TimelineEntryAttributes, description: "attributes for creating a timeline", required: true
+        field :create_milestone, Decidim::Accountability::MilestoneType, description: "create timeline entry", null: false do
+          argument :attributes, MilestoneAttributes, description: "attributes for creating a timeline", required: true
         end
 
-        field :update_timeline_entry, Decidim::Accountability::TimelineEntryType, description: "update timeline entry", null: false do
-          argument :attributes, TimelineEntryAttributes, description: "attributes for updating a timeline", required: true
+        field :update_milestone, Decidim::Accountability::MilestoneType, description: "update timeline entry", null: false do
+          argument :attributes, MilestoneAttributes, description: "attributes for updating a timeline", required: true
           argument :id, GraphQL::Types::ID, "timeline entry's unique ID", required: true
         end
 
-        field :delete_timeline_entry, Decidim::Accountability::TimelineEntryType, description: "delete timeline entry", null: false do
+        field :delete_milestone, Decidim::Accountability::MilestoneType, description: "delete timeline entry", null: false do
           argument :id, GraphQL::Types::ID, "timeline entry's unique ID", required: true
         end
 
-        def create_timeline_entry(attributes:)
-          enforce_permission_to :create, :timeline_entry
+        def create_milestone(attributes:)
+          enforce_permission_to :create, :milestone
 
-          form = Decidim::Accountability::Admin::TimelineEntryForm.from_params(
+          form = Decidim::Accountability::Admin::MilestoneForm.from_params(
             decidim_accountability_result_id: object.id,
             entry_date: attributes.entry_date,
             description: json_value(attributes.description),
@@ -39,9 +39,9 @@ module Decidim
             current_user:
           )
 
-          Decidim::Accountability::Admin::CreateTimelineEntry.call(form) do
-            on(:ok) do |timeline_entry|
-              return timeline_entry
+          Decidim::Accountability::Admin::CreateMilestone.call(form) do
+            on(:ok) do |milestone|
+              return milestone
             end
 
             on(:invalid) do
@@ -52,20 +52,20 @@ module Decidim
           end
 
           GraphQL::ExecutionError.new(
-            I18n.t("decidim.accountability.admin.timeline_entries.create.invalid")
+            I18n.t("decidim.accountability.admin.milestones.create.invalid")
           )
         end
 
-        def update_timeline_entry(attributes:, id:)
-          entry = object.timeline_entries.find_by(id:)
+        def update_milestone(attributes:, id:)
+          entry = object.milestones.find_by(id:)
           unless entry
             return GraphQL::ExecutionError.new(
-              I18n.t("decidim.accountability.admin.timeline_entries.update.invalid")
+              I18n.t("decidim.accountability.admin.milestones.update.invalid")
             )
           end
-          enforce_permission_to :update, :timeline_entry, timeline_entry: entry
+          enforce_permission_to :update, :milestone, milestone: entry
 
-          form = Decidim::Accountability::Admin::TimelineEntryForm.from_params(
+          form = Decidim::Accountability::Admin::MilestoneForm.from_params(
             decidim_accountability_result_id: object.id,
             entry_date: attributes.entry_date,
             description: json_value(attributes.description),
@@ -76,7 +76,7 @@ module Decidim
             current_user:
           )
 
-          Decidim::Accountability::Admin::UpdateTimelineEntry.call(form, entry) do
+          Decidim::Accountability::Admin::UpdateMilestone.call(form, entry) do
             on(:ok) do
               return entry
             end
@@ -89,18 +89,18 @@ module Decidim
           end
 
           GraphQL::ExecutionError.new(
-            I18n.t("decidim.accountability.admin.timeline_entries.update.invalid")
+            I18n.t("decidim.accountability.admin.milestones.update.invalid")
           )
         end
 
-        def delete_timeline_entry(id:)
-          entry = object.timeline_entries.find_by(id:)
+        def delete_milestone(id:)
+          entry = object.milestones.find_by(id:)
           unless entry
             return GraphQL::ExecutionError.new(
-              I18n.t("decidim.accountability.admin.timeline_entries.destroy.invalid")
+              I18n.t("decidim.accountability.admin.milestones.destroy.invalid")
             )
           end
-          enforce_permission_to :destroy, :timeline_entry, timeline_entry: entry
+          enforce_permission_to :destroy, :milestone, milestone: entry
 
           entry.destroy!
           entry

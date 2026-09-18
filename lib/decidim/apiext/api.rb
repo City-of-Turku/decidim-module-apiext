@@ -2,9 +2,6 @@
 
 module Decidim
   module Apiext
-    autoload :ComponentMutationType, "decidim/api/component_mutation_type"
-    autoload :ComponentMutationInterface, "decidim/api/component_mutation_interface"
-
     module Proposals
       autoload :ProposalsMutationType, "decidim/api/proposals/proposals_mutation_type"
       autoload :ProposalMutationType, "decidim/api/proposals/proposal_mutation_type"
@@ -27,7 +24,7 @@ module Decidim
       autoload :ResultLinkResourceType, "decidim/api/accountability/result_link_resource_type"
 
       autoload :ResultMutationType, "decidim/api/accountability/result_mutation_type"
-      autoload :TimelineEntryAttributes, "decidim/api/accountability/timeline_entry_attributes"
+      autoload :MilestoneAttributes, "decidim/api/accountability/milestone_attributes"
     end
 
     autoload :ParticipantDetailsType, "decidim/api/participant_details_type"

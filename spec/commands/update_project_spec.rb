@@ -9,6 +9,7 @@ module Decidim
         subject { described_class.new(form, project) }
 
         let(:budget) { create(:budget) }
+        let(:secont_budget) { create(:budget, component: budget.component)}
         let(:project) { create(:project, budget:) }
         let(:organization) { budget.component.organization }
         let(:taxonomizations) do
@@ -38,7 +39,7 @@ module Decidim
             current_user:,
             title: { en: "title" },
             description: { en: "description" },
-            budget:,
+            budget: secont_budget,
             budget_amount: 10_000_000,
             proposal_ids: proposals.map(&:id),
             taxonomizations:,
@@ -69,6 +70,11 @@ module Decidim
           it "sets the taxonomies" do
             subject.call
             expect(project.reload.taxonomies).to match_array(taxonomizations.map(&:taxonomy))
+          end
+
+          it "updates the budget of the project" do
+            subject.call
+            expect(project.budget).to eq(secont_budget)
           end
 
           it "traces the action", versioning: true do
