@@ -26,7 +26,5 @@ module Decidim
       autoload :ResultMutationType, "decidim/api/accountability/result_mutation_type"
       autoload :MilestoneAttributes, "decidim/api/accountability/milestone_attributes"
     end
-
-    autoload :ParticipantDetailsType, "decidim/api/participant_details_type"
   end
 end

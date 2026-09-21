@@ -58,14 +58,17 @@ module Decidim
         let(:query) { "{ profilePath }" }
 
         it "returns the user profile path" do
-          expect(response).to include("profilePath" => "/profiles/#{model.nickname}")
+          expect(response).to include("profilePath" => "/en/profiles/#{model.nickname}")
         end
 
         context "when user is deleted" do
           let(:model) { create(:user, :confirmed, :deleted) }
 
-          it "returns nothing" do
-            expect(response).to be_nil
+          it "returns error" do
+            expect { response }.to raise_error(
+              Decidim::Api::Errors::UnauthorizedObjectError,
+              "You cannot view or edit this User because you do not have permissions"
+            )
           end
         end
       end

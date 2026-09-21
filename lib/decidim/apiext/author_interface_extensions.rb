@@ -4,6 +4,7 @@ module Decidim
   module Apiext
     module AuthorInterfaceExtensions
       extend ActiveSupport::Concern
+
       included do
         def self.resolve_type(obj, _ctx)
           return Decidim::Core::UserType if obj.is_a? Decidim::User

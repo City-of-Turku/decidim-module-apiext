@@ -4,6 +4,7 @@ module Decidim
   module Apiext
     module CommentableInterfaceExtensions
       extend ActiveSupport::Concern
+
       included do
         definition_methods do
           def resolve_type(object, _context)

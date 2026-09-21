@@ -11,7 +11,7 @@ base_path = "../" if File.basename(__dir__) == "development_app"
 require_relative "#{base_path}lib/decidim/apiext/version"
 
 DECIDIM_VERSION = Decidim::Apiext.decidim_version
-DECIDIM_BRANCH = "release/0.31-stable"
+DECIDIM_BRANCH = "release/0.32-stable"
 
 gem "decidim", DECIDIM_VERSION
 gem "decidim-apiext", path: "."
@@ -26,8 +26,8 @@ group :development, :test do
   gem "byebug", "~> 11.0", platform: :mri
 
   gem "decidim-dev", DECIDIM_VERSION
-
   gem "decidim-initiatives", DECIDIM_VERSION
+
   gem "faker", "~> 3.5"
 
   # Fix issue with simplecov-cobertura

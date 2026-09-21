@@ -11,20 +11,15 @@ module Decidim
     autoload :QueryExtensions, "decidim/apiext/query_extensions"
     autoload :AuthorInterfaceExtensions, "decidim/apiext/author_interface_extensions"
     autoload :ProjectTypeExtensions, "decidim/apiext/project_type_extensions"
-    autoload :AccountabilityTypeExtensions, "decidim/apiext/accountability_type_extensions"
     autoload :ResultTypeExtensions, "decidim/apiext/result_type_extensions"
     autoload :BudgetTypeExtensions, "decidim/apiext/budget_type_extensions"
     autoload :CommentableInterfaceExtensions, "decidim/apiext/commentable_interface_extensions"
     autoload :ProjectTypeAuthorizationExtensions, "decidim/apiext/project_type_authorization_extensions"
     autoload :ComponentInterfaceExtensions, "decidim/apiext/component_interface_extensions"
 
-    include ActiveSupport::Configurable
-
     # Public Setting that makes the API authentication necessary in order to
     # access it.
-    config_accessor :force_api_authentication do
-      true
-    end
+    mattr_accessor :force_api_authentication, default: true
 
     def self.possible_project_linked_resources
       @possible_project_linked_resources ||= [].tap do |resources|

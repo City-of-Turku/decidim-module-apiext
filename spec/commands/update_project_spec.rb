@@ -17,7 +17,8 @@ module Decidim
         end
         let(:participatory_process) { budget.component.participatory_space }
         let(:current_user) { create(:api_user, organization:) }
-        let(:uploaded_photos) { [] }
+        let(:uploaded_attachments) { [] }
+        let(:current_attachments) { [] }
         let(:selected) { nil }
         let(:address) { "something" }
         let(:latitude) { 40.1234 }
@@ -45,7 +46,8 @@ module Decidim
             taxonomizations:,
             selected:,
             photos: current_photos,
-            add_photos: uploaded_photos,
+            attachments: current_attachments,
+            add_attachments: uploaded_attachments,
             address:,
             latitude:,
             longitude:

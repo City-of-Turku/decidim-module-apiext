@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.metadata = { "rubygems_mfa_required" => "true" }
   spec.name = "decidim-apiext"
   spec.version = Decidim::Apiext.version
-  spec.required_ruby_version = ">= 3.3"
+  spec.required_ruby_version = ">= 3.4"
   spec.authors = ["Antti Hukkanen", "Sina Eftekhar"]
   spec.email = ["info@mainiotech.fi"]
 

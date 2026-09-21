@@ -32,7 +32,10 @@ describe Decidim::Budgets::ProjectType, type: :graphql do
       end
 
       it "does not return data by default" do
-        expect(response).to be_nil
+        expect { response }.to raise_error(
+          Decidim::Api::Errors::UnauthorizedObjectError,
+          "You cannot view or edit this Project because you do not have permissions"
+        )
       end
 
       context "and the user is an admin" do
