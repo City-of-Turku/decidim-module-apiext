@@ -27,12 +27,12 @@ group :development, :test do
 
   gem "decidim-dev", DECIDIM_VERSION
 
+  gem "decidim-initiatives", DECIDIM_VERSION
   gem "faker", "~> 3.5"
 
   # Fix issue with simplecov-cobertura
   # See: https://github.com/jessebs/simplecov-cobertura/pull/44
   gem "rexml", "3.4.1"
-  gem "decidim-initiatives", DECIDIM_VERSION
 end
 
 group :development do
