@@ -2,11 +2,6 @@
 
 module Decidim
   module Apiext
-    module Proposals
-      autoload :ProposalsMutationType, "decidim/api/proposals/proposals_mutation_type"
-      autoload :ProposalMutationType, "decidim/api/proposals/proposal_mutation_type"
-    end
-
     module Budgets
       autoload :BudgetsMutationType, "decidim/api/budgets/budgets_mutation_type"
       autoload :BudgetMutationType, "decidim/api/budgets/budget_mutation_type"
