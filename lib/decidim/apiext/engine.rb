@@ -43,6 +43,7 @@ module Decidim
             # permissions
             Decidim::Budgets::Permissions.include(BudgetsPermissionsExtensions)
           end
+          ::Decidim::Proposals::ProposalMutationType.include(::Decidim::Apiext::ProposalMutationTypeExtensions)
         end
       end
 
