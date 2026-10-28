@@ -8,6 +8,8 @@ module Decidim
     module Proposals
       autoload :ProposalsMutationType, "decidim/api/proposals/proposals_mutation_type"
       autoload :ProposalMutationType, "decidim/api/proposals/proposal_mutation_type"
+      autoload :ProposalAnswerType, "decidim/api/proposals/proposal_answer_type"
+      autoload :AnswerProposalAttributes, "decidim/api/proposals/answer_proposal_attributes"
     end
 
     module Budgets
