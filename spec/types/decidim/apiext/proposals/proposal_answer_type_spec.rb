@@ -1,37 +1,52 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "decidim/api/test/type_context"
 
 module Decidim
   module Apiext
     module Proposals
-      describe ProposalMutationType do
-        include_context "with a graphql class type"
+      describe ProposalAnswerType, type: :graphql do
+        include_context "with a graphql class mutation"
+
+        let(:root_klass) { ProposalMutationType }
 
         let(:model) { create(:proposal) }
-        let(:state) { %w(accepted evaluating rejected).sample }
+        let(:state) { "accepted" }
         let(:answer_en) { ::Faker::Lorem.paragraph }
         let(:answer_fi) { ::Faker::Lorem.paragraph }
         let(:answer_sv) { ::Faker::Lorem.paragraph }
         let(:component) { model.component }
 
-        let(:query) do
-          %(
-            {
-              answer(
-                state: "#{state}",
+        let(:variables) do
+          {
+            input: {
+              attributes: {
+                state:,
                 answerContent: {
-                  en: "#{answer_en}",
-                  fi: "#{answer_fi}",
-                  sv: "#{answer_sv}"
+                  en: answer_en,
+                  fi: answer_fi,
+                  sv: answer_sv
                 }
-              ){
-                  id
-                  state
-                }
+              }
             }
-          )
+          }
+        end
+
+        let(:query) do
+          <<~GRAPHQL
+            mutation($input: AnswerInput!) {
+              answer(input: $input) {
+                id
+                state
+                answer {
+                  translations {
+                    locale
+                    text
+                  }
+                }
+              }
+            }
+          GRAPHQL
         end
 
         it_behaves_like "manage proposal mutation examples" do

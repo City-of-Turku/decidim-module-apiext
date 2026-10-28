@@ -2,7 +2,7 @@
 
 shared_examples "manage proposal mutation examples" do
   context "when non admin user is logged in" do
-    describe "try to answer to porposal" do
+    describe "try to answer to proposal" do
       it "raises error" do
         expect { response }.to raise_error(Decidim::Apiext::ActionForbidden)
       end
@@ -17,42 +17,33 @@ shared_examples "manage proposal mutation examples" do
     end
 
     describe "answer to proposal" do
-      it "changes proposals state" do
-        expect(response["answer"]).to include("id" => model.id.to_s)
-        expect(response["answer"]).to include("state" => state)
-        answer = Decidim::Proposals::Proposal.find(model.id).answer
+      it "changes proposal's state" do
+        expect(response["answer"]).to include(
+          "id" => model.id.to_s,
+          "state" => state
+        )
+
+        answer = model.reload.answer
+
         expect(answer["en"]).to eq(answer_en)
         expect(answer["fi"]).to eq(answer_fi)
         expect(answer["sv"]).to eq(answer_sv)
       end
+
+      it "persists the answer content" do
+        response
+
+        expect(model.reload.answer).to include(
+          "en" => answer_en,
+          "fi" => answer_fi,
+          "sv" => answer_sv
+        )
+      end
     end
 
     describe "add cost" do
-      let(:query) do
-        %(
-          {
-            answer(
-              state: "accepted"
-              cost: #{cost}
-              costReport: {
-                en: "#{cost_report[:en]}",
-                fi: "#{cost_report[:fi]}",
-                sv: "#{cost_report[:sv]}"
-              }
-              executionPeriod: {
-                en: "#{execution_period[:en]}",
-                fi: "#{execution_period[:fi]}",
-                sv: "#{execution_period[:sv]}"
-              }
-            )
-            {
-              id
-              state
-            }
-          }
-        )
-      end
       let(:cost) { Faker::Number.between(from: 1, to: 100_000.0).round(2).to_f }
+
       let(:cost_report) do
         {
           en: Faker::Lorem.paragraph,
@@ -60,6 +51,7 @@ shared_examples "manage proposal mutation examples" do
           sv: Faker::Lorem.paragraph
         }
       end
+
       let(:execution_period) do
         {
           en: Faker::Lorem.paragraph,
@@ -68,17 +60,40 @@ shared_examples "manage proposal mutation examples" do
         }
       end
 
+      let(:variables) do
+        super().deep_merge(
+          input: {
+            attributes: {
+              state: "accepted",
+              cost:,
+              costReport: cost_report,
+              executionPeriod: execution_period
+            }
+          }
+        )
+      end
+
       it "changes proposal's cost" do
-        expect(response["answer"]).to include("state" => "accepted")
-        expect(response["answer"]).to include("id" => model.id.to_s)
-        proposal = Decidim::Proposals::Proposal.find(model.id)
+        expect(response["answer"]).to include(
+          "id" => model.id.to_s,
+          "state" => "accepted"
+        )
+
+        proposal = model.reload
+
         expect(proposal.cost).to eq(cost)
-        expect(proposal.cost_report["en"]).to eq(cost_report[:en])
-        expect(proposal.cost_report["fi"]).to eq(cost_report[:fi])
-        expect(proposal.cost_report["sv"]).to eq(cost_report[:sv])
-        expect(proposal.execution_period["en"]).to eq(execution_period[:en])
-        expect(proposal.execution_period["fi"]).to eq(execution_period[:fi])
-        expect(proposal.execution_period["sv"]).to eq(execution_period[:sv])
+
+        expect(proposal.cost_report).to include(
+          "en" => cost_report[:en],
+          "fi" => cost_report[:fi],
+          "sv" => cost_report[:sv]
+        )
+
+        expect(proposal.execution_period).to include(
+          "en" => execution_period[:en],
+          "fi" => execution_period[:fi],
+          "sv" => execution_period[:sv]
+        )
       end
     end
   end
