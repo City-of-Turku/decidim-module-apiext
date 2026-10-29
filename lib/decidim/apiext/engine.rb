@@ -48,6 +48,10 @@ module Decidim
         Decidim::Core::ComponentInterface.include(
           Decidim::Apiext::ComponentInterfaceExtensions
         )
+      end
+
+      initializer "decidim_apiext.register_mutations",
+            before: "decidim_api.graphiql" do
         Decidim::MutationRegistry.instance.register(
           Decidim::Apiext::Budgets::BudgetsMutationType
         )
