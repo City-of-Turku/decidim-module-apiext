@@ -15,13 +15,9 @@ jobs:
   build_app:
     name: Build test application
     uses: mainio/gha-decidim-module/.github/workflows/build_app.yml@main
-    with:
-      runner: ubuntu-24.04
     secrets: inherit
   main:
     needs: build_app
     name: Tests
     uses: mainio/gha-decidim-module/.github/workflows/ci_rspec.yml@main
-    with:
-      runner: ubuntu-24.04
     secrets: inherit

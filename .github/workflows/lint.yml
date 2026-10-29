@@ -19,4 +19,3 @@ jobs:
     with:
       eslint: true
       stylelint: false
-      runner: ubuntu-24.04
