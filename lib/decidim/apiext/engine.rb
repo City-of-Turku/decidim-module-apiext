@@ -48,6 +48,9 @@ module Decidim
         Decidim::Core::ComponentInterface.include(
           Decidim::Apiext::ComponentInterfaceExtensions
         )
+        Decidim::MutationRegistry.instance.register(
+          Decidim::Apiext::Budgets::BudgetsMutationType
+        )
       end
     end
   end
