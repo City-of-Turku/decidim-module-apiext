@@ -51,10 +51,17 @@ module Decidim
       end
 
       initializer "decidim_apiext.register_mutations",
-            before: "decidim_api.graphiql" do
-        Decidim::MutationRegistry.instance.register(
-          Decidim::Apiext::Budgets::BudgetsMutationType
-        )
+                  before: "decidim_api.graphiql" do
+        registry = Decidim::MutationRegistry.instance
+
+        [
+          Decidim::Budgets::BudgetsMutationType,
+          Decidim::Accountability::AccountabilityMutationType
+        ].map do |mutation_type|
+          raise NameError, "#{mutation_type} is already registered" if registry.mutation_types.include?(mutation_type)
+
+          registry.register(mutation_type)
+        end
       end
     end
   end

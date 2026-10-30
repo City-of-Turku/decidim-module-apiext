@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Decidim
-  module Apiext
+  module Proposals
     class UpdateProposalClassificationsType < Decidim::Api::Types::BaseMutation
       graphql_name "UpdateProposalClassifications"
 
@@ -9,7 +9,7 @@ module Decidim
 
       type Decidim::Proposals::ProposalType
 
-      argument :taxonomies, [GraphQL::Types::ID], required: true
+      argument :taxonomies, [GraphQL::Types::ID], "ID of the taxonomies", required: true
 
       def authorized?(taxonomies:)
         unless current_user && super && allowed_to?(:update, :proposal_taxonomy, object, context, scope: :admin)

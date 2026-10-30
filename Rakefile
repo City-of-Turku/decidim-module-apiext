@@ -6,7 +6,7 @@ def install_module(path)
   Dir.chdir(path) do
     system("bundle exec rails generate decidim:apiext:install")
     system("bundle exec rake decidim_apifiles:install:migrations")
-    system("bundle exec rake decidim_apiext:neutralize_add_user_type_to_action_logs_migration")
+    system("bundle exec rake decidim_apiext:upgrade:neutralize_add_user_type_to_action_logs_migration")
     system("bundle exec rake decidim_apiext:install:migrations")
     system("bundle exec rake db:migrate")
   end

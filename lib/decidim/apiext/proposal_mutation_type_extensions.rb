@@ -7,7 +7,7 @@ module Decidim
 
       included do
         field :update_classifications,
-              mutation: ::Decidim::Apiext::UpdateProposalClassificationsType,
+              mutation: ::Decidim::Proposals::UpdateProposalClassificationsType,
               description: "Updates a proposal's classifications"
       end
     end

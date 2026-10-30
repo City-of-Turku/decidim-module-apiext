@@ -3,7 +3,7 @@
 require "spec_helper"
 
 module Decidim
-  module Apiext
+  module Proposals
     describe UpdateProposalClassificationsType, type: :graphql do
       include_context "with a graphql class mutation"
       let(:organization) { current_organization }

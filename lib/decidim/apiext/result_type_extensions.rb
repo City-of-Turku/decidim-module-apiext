@@ -6,11 +6,11 @@ module Decidim
       def self.included(type)
         return unless Decidim::Apiext.possible_result_linked_resources.any?
 
-        type.field :linked_resources, [Decidim::Apiext::Accountability::ResultLinkResourceType], null: true do
+        type.field :linked_resources, [Decidim::Accountability::ResultLinkResourceType], null: true do
           description "The linked resources for this result."
         end
 
-        type.field :linking_resources, [Decidim::Apiext::Accountability::ResultLinkResourceType], null: true do
+        type.field :linking_resources, [Decidim::Accountability::ResultLinkResourceType], null: true do
           description "The linking resources for this result."
         end
       end

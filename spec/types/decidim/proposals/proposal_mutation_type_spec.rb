@@ -12,7 +12,7 @@ describe Decidim::Proposals::ProposalMutationType do
 
     it "uses the correct mutation type" do
       expect(field.mutation)
-        .to eq(Decidim::Apiext::UpdateProposalClassificationsType)
+        .to eq(Decidim::Proposals::UpdateProposalClassificationsType)
     end
 
     it "has the correct description" do

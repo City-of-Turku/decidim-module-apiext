@@ -1,160 +1,158 @@
 # frozen_string_literal: true
 
 module Decidim
-  module Apiext
-    module Budgets
-      class BudgetMutationType < Decidim::Api::Types::BaseObject
-        include ::Decidim::Apiext::ApiPermissions
-        include ::Decidim::Apiext::ApiMutationHelpers
+  module Budgets
+    class BudgetMutationType < Decidim::Api::Types::BaseObject
+      include ::Decidim::Apiext::ApiPermissions
+      include ::Decidim::Apiext::ApiMutationHelpers
 
-        graphql_name "BudgetMutation"
-        description "A Budget of budget component"
+      graphql_name "BudgetMutation"
+      description "A Budget of budget component"
 
-        field :id, GraphQL::Types::ID, "Budget's unique ID", null: false
+      field :id, GraphQL::Types::ID, "Budget's unique ID", null: false
 
-        field :create_project, ::Decidim::Budgets::ProjectType, null: false do
-          description "A mutation to create a project within a budget."
+      field :create_project, ::Decidim::Budgets::ProjectType, null: false do
+        description "A mutation to create a project within a budget."
 
-          argument :attributes, ProjectAttributes, "Project attributes", required: true
-        end
+        argument :attributes, ProjectAttributes, "Project attributes", required: true
+      end
 
-        field :update_project, ::Decidim::Budgets::ProjectType, "Update project", null: true do
-          description "A mutation to update a project within a budget."
+      field :update_project, ::Decidim::Budgets::ProjectType, "Update project", null: true do
+        description "A mutation to update a project within a budget."
 
-          argument :attributes, ProjectAttributes, "Project attributes", required: true
-          argument :id, GraphQL::Types::ID, "ID of the project", required: true
-        end
+        argument :attributes, ProjectAttributes, "Project attributes", required: true
+        argument :id, GraphQL::Types::ID, "ID of the project", required: true
+      end
 
-        field :project, ProjectMutationType, description: "Mutates a project", null: true do
-          argument :id, GraphQL::Types::ID, "ID of the project", required: true
-        end
+      field :project, ProjectMutationType, description: "Mutates a project", null: true do
+        argument :id, GraphQL::Types::ID, "ID of the project", required: true
+      end
 
-        field :soft_delete_project, ::Decidim::Budgets::ProjectType, "Soft delete project", null: true do
-          description "A mutation to delete a project within a budget."
+      field :soft_delete_project, ::Decidim::Budgets::ProjectType, "Soft delete project", null: true do
+        description "A mutation to delete a project within a budget."
 
-          argument :id, GraphQL::Types::ID, "ID of the project", required: true
-        end
+        argument :id, GraphQL::Types::ID, "ID of the project", required: true
+      end
 
-        def create_project(attributes:)
-          enforce_permission_to :create, :project
+      def create_project(attributes:)
+        enforce_permission_to :create, :project
 
-          form = project_form_from(attributes)
+        form = project_form_from(attributes)
 
-          ::Decidim::Budgets::Admin::CreateProject.call(form) do
-            on(:ok) do |project|
-              # The command does not broadcast the project so we need to fetch it
-              # from a private method within the command itself.
-              return project
-            end
-            on(:invalid) do
-              return GraphQL::ExecutionError.new(
-                form.errors.full_messages.join(", ")
-              )
-            end
+        ::Decidim::Budgets::Admin::CreateProject.call(form) do
+          on(:ok) do |project|
+            # The command does not broadcast the project so we need to fetch it
+            # from a private method within the command itself.
+            return project
           end
-
-          GraphQL::ExecutionError.new(
-            I18n.t("decidim.budgets.admin.projects.create.invalid")
-          )
-        end
-
-        def update_project(id:, attributes:)
-          project = object.projects.find_by(id:)
-          return unless project
-
-          enforce_permission_to(:update, :project, project:)
-
-          form = project_form_from(attributes)
-          ::Decidim::Budgets::Admin::UpdateProject.call(form, project) do
-            on(:ok) do |updated_project|
-              return updated_project
-            end
-
-            on(:invalid) do
-              return GraphQL::ExecutionError.new(
-                form.errors.full_messages.join(", ")
-              )
-            end
-          end
-
-          GraphQL::ExecutionError.new(
-            I18n.t("decidim.budgets.admin.projects.update.invalid")
-          )
-        end
-
-        def soft_delete_project(id:)
-          project = object.projects.find_by(id:)
-          return unless project
-
-          enforce_permission_to(:soft_delete, :project, trashable_deleted_resource: project)
-
-          ::Decidim::Commands::SoftDeleteResource.call(project, current_user) do
-            on(:ok) do |result|
-              return result
-            end
-
-            on(:invalid) do
-              return GraphQL::ExecutionError.new(
-                I18n.t("decidim.apiext.actions.soft_delete.error")
-              )
-            end
+          on(:invalid) do
+            return GraphQL::ExecutionError.new(
+              form.errors.full_messages.join(", ")
+            )
           end
         end
 
-        def project(id:)
-          object.projects.find(id)
-        rescue ActiveRecord::RecordNotFound
-          GraphQL::ExecutionError.new(
-            I18n.t("decidim.apiext.budgets.project_mutation.invalid")
-          )
-        end
+        GraphQL::ExecutionError.new(
+          I18n.t("decidim.budgets.admin.projects.create.invalid")
+        )
+      end
 
-        private
+      def update_project(id:, attributes:)
+        project = object.projects.find_by(id:)
+        return unless project
 
-        def project_form_from(attributes, project = nil)
-          ::Decidim::Budgets::Admin::ProjectForm.from_params(
-            "project" => project_params(attributes, project)
-          ).with_context(
-            current_organization:,
-            current_component: object.component,
-            current_user:,
-            budget: object
-          )
-        end
+        enforce_permission_to(:update, :project, project:)
 
-        # rubocop:disable Metrics/CyclomaticComplexity
-        def project_params(attributes, project = nil)
-          {
-            "title" => json_value(attributes.title),
-            "description" => json_value(attributes.description),
-            "budget_amount" => attributes.budget_amount,
-            "budget_amount_min" => attributes.budget_amount_min,
-            "address" => attributes&.location&.address,
-            "latitude" => attributes&.location&.latitude,
-            "longitude" => attributes&.location&.longitude,
-            "taxonomies" => attributes.taxonomy_ids || [],
-            "proposal_ids" => attributes.proposal_ids || related_ids_for(project, :proposals),
-            "idea_ids" => attributes.idea_ids || related_ids_for(project, :ideas),
-            "plan_ids" => attributes.plan_ids || related_ids_for(project, :plans)
-          }.tap do |attrs|
-            attrs.merge!(attributes.main_image_attributes) if attributes.main_image_attributes
+        form = project_form_from(attributes)
+        ::Decidim::Budgets::Admin::UpdateProject.call(form, project) do
+          on(:ok) do |updated_project|
+            return updated_project
+          end
+
+          on(:invalid) do
+            return GraphQL::ExecutionError.new(
+              form.errors.full_messages.join(", ")
+            )
           end
         end
-        # rubocop:enable Metrics/CyclomaticComplexity
 
-        def related_ids_for(project, resource)
-          return [] unless project
+        GraphQL::ExecutionError.new(
+          I18n.t("decidim.budgets.admin.projects.update.invalid")
+        )
+      end
 
-          project.linked_resources(resource, "included_#{resource}").map(&:id)
+      def soft_delete_project(id:)
+        project = object.projects.find_by(id:)
+        return unless project
+
+        enforce_permission_to(:soft_delete, :project, trashable_deleted_resource: project)
+
+        ::Decidim::Commands::SoftDeleteResource.call(project, current_user) do
+          on(:ok) do |result|
+            return result
+          end
+
+          on(:invalid) do
+            return GraphQL::ExecutionError.new(
+              I18n.t("decidim.apiext.actions.soft_delete.error")
+            )
+          end
         end
+      end
 
-        def current_organization
-          context[:current_organization]
-        end
+      def project(id:)
+        object.projects.find(id)
+      rescue ActiveRecord::RecordNotFound
+        GraphQL::ExecutionError.new(
+          I18n.t("decidim.apiext.budgets.project_mutation.invalid")
+        )
+      end
 
-        def current_user
-          context[:current_user]
+      private
+
+      def project_form_from(attributes, project = nil)
+        ::Decidim::Budgets::Admin::ProjectForm.from_params(
+          "project" => project_params(attributes, project)
+        ).with_context(
+          current_organization:,
+          current_component: object.component,
+          current_user:,
+          budget: object
+        )
+      end
+
+      # rubocop:disable Metrics/CyclomaticComplexity
+      def project_params(attributes, project = nil)
+        {
+          "title" => json_value(attributes.title),
+          "description" => json_value(attributes.description),
+          "budget_amount" => attributes.budget_amount,
+          "budget_amount_min" => attributes.budget_amount_min,
+          "address" => attributes&.location&.address,
+          "latitude" => attributes&.location&.latitude,
+          "longitude" => attributes&.location&.longitude,
+          "taxonomies" => attributes.taxonomy_ids || [],
+          "proposal_ids" => attributes.proposal_ids || related_ids_for(project, :proposals),
+          "idea_ids" => attributes.idea_ids || related_ids_for(project, :ideas),
+          "plan_ids" => attributes.plan_ids || related_ids_for(project, :plans)
+        }.tap do |attrs|
+          attrs.merge!(attributes.main_image_attributes) if attributes.main_image_attributes
         end
+      end
+      # rubocop:enable Metrics/CyclomaticComplexity
+
+      def related_ids_for(project, resource)
+        return [] unless project
+
+        project.linked_resources(resource, "included_#{resource}").map(&:id)
+      end
+
+      def current_organization
+        context[:current_organization]
+      end
+
+      def current_user
+        context[:current_user]
       end
     end
   end
