@@ -15,7 +15,8 @@ module Decidim
         let(:category) { create(:category, participatory_space: budget.component.participatory_space) }
         let(:participatory_process) { budget.component.participatory_space }
         let(:current_user) { create(:api_user, organization:) }
-        let(:uploaded_photos) { [] }
+        let(:uploaded_attachments) { [] }
+        let(:current_attachments) { [] }
         let(:selected) { nil }
         let(:address) { "something" }
         let(:latitude) { 40.1234 }
@@ -31,6 +32,8 @@ module Decidim
             component: proposal_component
           )
         end
+        let(:uploaded_photos) { [] }
+
         let(:form) do
           double(
             invalid?: invalid,

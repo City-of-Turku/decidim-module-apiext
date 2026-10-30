@@ -21,6 +21,8 @@ module Decidim
     autoload :CommentableInterfaceExtensions, "decidim/apiext/commentable_interface_extensions"
     autoload :ProjectTypeAuthorizationExtensions, "decidim/apiext/project_type_authorization_extensions"
     autoload :ComponentInterfaceExtensions, "decidim/apiext/component_interface_extensions"
+    autoload :ParticipantDetailsType, "decidim/api/participant_details_type"
+    autoload :ComponentMutationType, "decidim/api/component_mutation_type"
 
     include ActiveSupport::Configurable
 
