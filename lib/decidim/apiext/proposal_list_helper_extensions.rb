@@ -5,7 +5,7 @@ module Decidim
     module ProposalListHelperExtensions
       def query_scope
         super.published
-          .not_hidden
+             .not_hidden
       end
     end
   end

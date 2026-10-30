@@ -9,12 +9,12 @@ module Decidim
         type.field :current_settings, GraphQL::Types::JSON, null: true do
           description "current settings of this component"
         end
+      end
 
-        def current_settings
-          enforce_permission_to :read, :component, component: object
+      def current_settings
+        enforce_permission_to :read, :component, component: object
 
-          object.current_settings.to_h
-        end
+        object.current_settings.to_h
       end
     end
   end

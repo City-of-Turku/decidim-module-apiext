@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-shared_examples "manage proposal answer mutation examples" do
+shared_examples "manage proposal mutation examples" do
   context "when non admin user is logged in" do
     describe "try to answer to proposal" do
       it "raises error" do
@@ -65,7 +65,7 @@ shared_examples "manage proposal answer mutation examples" do
           input: {
             attributes: {
               state: "accepted",
-              cost:,
+              cost: cost,
               costReport: cost_report,
               executionPeriod: execution_period
             }
@@ -105,6 +105,7 @@ shared_examples "manage proposal classifications mutation examples" do
       expect { response }.to raise_error(Decidim::Apiext::ActionForbidden)
     end
   end
+
   context "when admin is logged in" do
     before do
       # rubocop:disable RSpec/AnyInstance
@@ -117,7 +118,7 @@ shared_examples "manage proposal classifications mutation examples" do
       expect(classification_response).to include("id" => model.id.to_s)
       expect(classification_response["scope"]).to include("id" => update_scope.id.to_s)
       expect(classification_response["category"]).to include("id" => update_category.id.to_s)
-      
+
       updated_proposal = Decidim::Proposals::Proposal.find(model.id)
       expect(updated_proposal.category).to eq(update_category)
       expect(updated_proposal.scope).to eq(update_scope)
@@ -157,7 +158,7 @@ shared_examples "manage proposal classifications mutation examples" do
         expect(api_response).to include("id" => model.id.to_s)
         expect(api_response["scope"]).to include("id" => update_scope.id.to_s)
         expect(api_response["category"]).to include("id" => categories.first.id.to_s)
-        
+
         updated_proposal = Decidim::Proposals::Proposal.find(model.id)
         expect(updated_proposal.category).to eq(categories.first)
         expect(updated_proposal.scope).to eq(update_scope)
@@ -177,7 +178,7 @@ shared_examples "manage proposal classifications mutation examples" do
 
     context "when the category does not belong the same space" do
       let!(:another_space) { create(:participatory_process, organization: model.organization) }
-      let!(:update_category) { create(:category, participatory_space: another_space)}
+      let!(:update_category) { create(:category, participatory_space: another_space) }
 
       it "returns error" do
         expect { api_response }.to raise_error(StandardError, /Please select a category/)
@@ -207,7 +208,7 @@ shared_examples "manage proposal classifications mutation examples" do
         expect(api_response).to include("id" => model.id.to_s)
         expect(api_response["scope"]).to include("id" => scopes.first.id.to_s)
         expect(api_response["category"]).to include("id" => update_category.id.to_s)
-        
+
         updated_proposal = Decidim::Proposals::Proposal.find(model.id)
         expect(updated_proposal.category).to eq(update_category)
         expect(updated_proposal.scope).to eq(scopes.first)
@@ -227,7 +228,7 @@ shared_examples "manage proposal classifications mutation examples" do
 
     context "when the scope does not belong the same organization" do
       let!(:another_organization) { create(:organization) }
-      let!(:update_scope) { create(:scope, organization: another_organization)}
+      let!(:update_scope) { create(:scope, organization: another_organization) }
 
       it "returns error" do
         expect { api_response }.to raise_error(StandardError, /Please select a scope/)
