@@ -1,0 +1,5 @@
+en:
+  decidim:
+    api:
+      errors:
+        unauthorized_mutation: You do not have permission to perform this mutation

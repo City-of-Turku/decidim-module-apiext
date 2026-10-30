@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "decidim/api/test/mutation_context"
 
 module Decidim
-  module Apiext
+  module Proposals
     describe UpdateProposalClassificationsType, type: :graphql do
-      include_context "with a graphql class mutation"
+      include_context "with apiext graphql mutation type"
+
       let(:organization) { current_organization }
       let(:root_klass) { Decidim::Proposals::ProposalMutationType }
       let(:participatory_process) do

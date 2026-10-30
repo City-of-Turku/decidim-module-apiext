@@ -18,7 +18,7 @@ module Decidim
     autoload :ProjectTypeAuthorizationExtensions, "decidim/apiext/project_type_authorization_extensions"
     autoload :ComponentInterfaceExtensions, "decidim/apiext/component_interface_extensions"
     autoload :ProposalMutationTypeExtensions, "decidim/apiext/proposal_mutation_type_extensions"
-    autoload :UpdateProposalClassificationsType, "decidim/apiext/update_proposal_classifications_type"
+    autoload :ParticipantDetailsType, "decidim/api/participant_details_type"
 
     include ActiveSupport::Configurable
 
