@@ -9,5 +9,7 @@ Decidim::Dev.dummy_app_path =
 
 require "decidim/dev/test/base_spec_helper"
 
+Decidim::Api.schema_max_depth = 15
+Decidim::Api.schema_max_complexity = 5000
 Decidim::Api::RecursionAnalyzer.send(:remove_const, :RECURSION_THRESHOLD)
-Decidim::Api::RecursionAnalyzer.const_set(:RECURSION_THRESHOLD, 5)
+Decidim::Api::RecursionAnalyzer::RECURSION_THRESHOLD = 4
