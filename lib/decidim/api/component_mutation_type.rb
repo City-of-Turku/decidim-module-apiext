@@ -5,18 +5,18 @@ module Decidim
     class ComponentMutationType < GraphQL::Schema::Union
       description "A component mutation."
 
-      possible_types ::Decidim::Apiext::Proposals::ProposalsMutationType,
-                     ::Decidim::Apiext::Budgets::BudgetsMutationType,
-                     ::Decidim::Apiext::Accountability::AccountabilityMutationType
+      possible_types ::Decidim::Proposals::ProposalsMutationType,
+                     ::Decidim::Budgets::BudgetsMutationType,
+                     ::Decidim::Accountability::AccountabilityMutationType
 
       def self.resolve_type(obj, _ctx)
         case obj.manifest_name
         when "proposals"
-          Decidim::Apiext::Proposals::ProposalsMutationType
+          ::Decidim::Proposals::ProposalsMutationType
         when "budgets"
-          Decidim::Apiext::Budgets::BudgetsMutationType
+          Decidim::Budgets::BudgetsMutationType
         when "accountability"
-          Decidim::Apiext::Accountability::AccountabilityMutationType
+          Decidim::Accountability::AccountabilityMutationType
         end
       end
     end

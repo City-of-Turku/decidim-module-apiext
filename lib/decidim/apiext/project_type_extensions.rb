@@ -7,11 +7,11 @@ module Decidim
         type.singleton_class.prepend(ClassMethods)
         return unless Decidim::Apiext.possible_project_linked_resources.any?
 
-        type.field :linked_resources, [Decidim::Apiext::Budgets::ProjectLinkResourceType], null: true do
+        type.field :linked_resources, [Decidim::Budgets::ProjectLinkResourceType], null: true do
           description "The linked resources for this project."
         end
 
-        type.field :linking_resources, [Decidim::Apiext::Budgets::ProjectLinkResourceType], null: true do
+        type.field :linking_resources, [Decidim::Budgets::ProjectLinkResourceType], null: true do
           description "The linking resources for this project."
         end
 
@@ -29,13 +29,12 @@ module Decidim
       end
 
       module ClassMethods
-        # There are some cases that the admin ([or] API) user needs to 
+        # There are some cases that the admin ([or] API) user needs to
         # be able to create a project while it is not published yet. This
         # overrides the authorization logic.
         def authorized?(object, context)
-
           return true if context[:current_user]&.admin?
-          
+
           super
         end
       end

@@ -19,6 +19,8 @@ module Decidim
     autoload :ResultTypeExtensions, "decidim/apiext/result_type_extensions"
     autoload :BudgetTypeExtensions, "decidim/apiext/budget_type_extensions"
     autoload :ComponentInterfaceExtensions, "decidim/apiext/component_interface_extensions"
+    autoload :ParticipantDetailsType, "decidim/api/participant_details_type"
+    autoload :ComponentMutationType, "decidim/api/component_mutation_type"
 
     include ActiveSupport::Configurable
 
