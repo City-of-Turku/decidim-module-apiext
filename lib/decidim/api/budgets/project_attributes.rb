@@ -18,6 +18,7 @@ module Decidim
       argument :main_image, Decidim::Apifiles::FileAttributes, "The main image for the project", required: false
 
       # Linked resources
+      argument :attachment_ids, [GraphQL::Types::Int], description: "IDs of existing project attachments", required: false
       argument :idea_ids, [GraphQL::Types::Int], description: "The linked idea IDs for the project", required: false
       argument :plan_ids, [GraphQL::Types::Int], description: "The linked plan IDs for the project", required: false
       argument :proposal_ids, [GraphQL::Types::Int], description: "The linked proposal IDs for the project", required: false

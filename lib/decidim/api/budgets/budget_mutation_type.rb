@@ -121,7 +121,7 @@ module Decidim
         )
       end
 
-      # rubocop:disable Metrics/CyclomaticComplexity
+      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       def project_params(attributes, project = nil)
         {
           "title" => json_value(attributes.title),
@@ -134,12 +134,13 @@ module Decidim
           "taxonomies" => attributes.taxonomy_ids || [],
           "proposal_ids" => attributes.proposal_ids || related_ids_for(project, :proposals),
           "idea_ids" => attributes.idea_ids || related_ids_for(project, :ideas),
-          "plan_ids" => attributes.plan_ids || related_ids_for(project, :plans)
+          "plan_ids" => attributes.plan_ids || related_ids_for(project, :plans),
+          "attachments" => attributes.attachment_ids&.map(&:to_i) || []
         }.tap do |attrs|
           attrs.merge!(attributes.main_image_attributes) if attributes.main_image_attributes
         end
       end
-      # rubocop:enable Metrics/CyclomaticComplexity
+      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
       def related_ids_for(project, resource)
         return [] unless project
