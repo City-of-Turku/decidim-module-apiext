@@ -63,7 +63,7 @@ module Decidim
 
         enforce_permission_to(:update, :project, project:)
 
-        form = project_form_from(attributes)
+        form = project_form_from(attributes, project)
         ::Decidim::Budgets::Admin::UpdateProject.call(form, project) do
           on(:ok) do |updated_project|
             return updated_project
@@ -121,7 +121,7 @@ module Decidim
         )
       end
 
-      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      # rubocop:disable Metrics/CyclomaticComplexity
       def project_params(attributes, project = nil)
         {
           "title" => json_value(attributes.title),
@@ -135,12 +135,12 @@ module Decidim
           "proposal_ids" => attributes.proposal_ids || related_ids_for(project, :proposals),
           "idea_ids" => attributes.idea_ids || related_ids_for(project, :ideas),
           "plan_ids" => attributes.plan_ids || related_ids_for(project, :plans),
-          "attachments" => attributes.attachment_ids&.map(&:to_i) || []
+          "attachments" => attachment_ids_for(attributes, project)
         }.tap do |attrs|
           attrs.merge!(attributes.main_image_attributes) if attributes.main_image_attributes
         end
       end
-      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      # rubocop:enable Metrics/CyclomaticComplexity
 
       def related_ids_for(project, resource)
         return [] unless project
@@ -154,6 +154,12 @@ module Decidim
 
       def current_user
         context[:current_user]
+      end
+
+      def attachment_ids_for(attributes, project)
+        return attributes.attachment_ids.map(&:to_i) unless attributes.attachment_ids.nil?
+
+        project ? project.attachments.pluck(:id) : []
       end
     end
   end

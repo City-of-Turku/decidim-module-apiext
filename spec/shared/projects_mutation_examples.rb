@@ -37,7 +37,10 @@ shared_examples "update project mutation examples" do
       it "preserves all existing attachments" do
         expect(response["updateProject"]).to eq("id" => project.id.to_s)
 
-        expect(project.reload.attachments.pluck(:id)).to contain_exactly(first_attachment.id, second_attachment.id)
+        expect(project.reload.attachments.pluck(:id)).to contain_exactly(
+          first_attachment.id,
+          second_attachment.id
+        )
       end
     end
 
@@ -49,8 +52,8 @@ shared_examples "update project mutation examples" do
       it "preserves the specified attachment and deletes the other" do
         expect(response["updateProject"]).to eq("id" => project.id.to_s)
 
-        expect(project.reload.attachments.pluck(:id)).to eq(
-          [first_attachment.id]
+        expect(project.reload.attachments.pluck(:id)).to contain_exactly(
+          first_attachment.id
         )
 
         expect(Decidim::Attachment.exists?(second_attachment.id)).to be(false)
@@ -76,10 +79,16 @@ shared_examples "update project mutation examples" do
         attributes.delete(:attachmentIds)
       end
 
-      it "deletes all existing attachments" do
+      it "preserves all existing attachments" do
         expect(response["updateProject"]).to eq("id" => project.id.to_s)
 
-        expect(project.reload.attachments).to be_empty
+        expect(project.reload.attachments.pluck(:id)).to contain_exactly(
+          first_attachment.id,
+          second_attachment.id
+        )
+
+        expect(Decidim::Attachment.exists?(first_attachment.id)).to be(true)
+        expect(Decidim::Attachment.exists?(second_attachment.id)).to be(true)
       end
     end
   end
